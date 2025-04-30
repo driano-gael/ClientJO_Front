@@ -11,22 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: etape 1 gestion du code
+      - name: etape 1 recupération du code
         uses: actions/checkout@v3
 
-      - name: etape 2 connexion CLI serveur
+      - name: etape 2 connexion SSH au serveur
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: etape 3 Pull + Build et run Docker
+      - name: etape 3 Pull sur serveur
         run: |
           ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 <<'EOF'
             cd ~/apps/clientjo
+            git checkout main
             git pull origin main
-            # docker stop clientjo || true
-            # docker rm clientjo || true
-            # cd /application
-            # docker build -t clientjo .
-            # docker run -d --name clientjo -p 80:3000 clientjo
-          EOF
+            git pull origin main
+            EOF
+
+      - name: etape 4 Gestion Docker
+        run: |
+          ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 <<'EOF'
+            docker stop clientjo || true
+            docker rm clientjo || true
+            cd ~/apps/clientjo/application
+            docker build -t clientjo .
+            docker run -d --name clientjo -p 80:3000 clientjo
+            EOF
