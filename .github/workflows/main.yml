@@ -27,7 +27,7 @@ jobs:
       - name: Build et run Docker
         run: |
           ssh deploy@167.172.53.237 <<'EOF'
-            cd ~/apps/clientjo
+            cd ~/apps/clientjo/application
             docker stop clientjo || true
             docker rm clientjo || true
             docker build -t clientjo .
