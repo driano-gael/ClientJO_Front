@@ -1,0 +1,35 @@
+name: Deploiement Client en Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deployer sur le serveur
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: etape 1 gestion du code
+        uses: actions/checkout@v3
+
+      - name: etape 2 connexion CLI serveur
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copie du projet sur le serveur
+        run: |
+          ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 "rm -rf ~/apps/clientjo/*"
+          scp -r . deploy@167.172.53.237:~/apps/clientjo  # Transfert des fichiers via SCP
+
+      - name: Build et run Docker
+        run: |
+          ssh deploy@167.172.53.237 <<'EOF'
+            cd ~/apps/clientjo
+            docker stop clientjo || true
+            docker rm clientjo || true
+            docker build -t clientjo .
+            docker run -d --name clientjo -p 80:3000 clientjo
+          EOF
