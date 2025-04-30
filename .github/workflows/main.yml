@@ -24,9 +24,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 <<'EOF'
             cd ~/apps/clientjo
             git pull origin main
-            docker stop clientjo || true
-            docker rm clientjo || true
-            cd /application
-            docker build -t clientjo .
-            docker run -d --name clientjo -p 80:3000 clientjo
+            # docker stop clientjo || true
+            # docker rm clientjo || true
+            # cd /application
+            # docker build -t clientjo .
+            # docker run -d --name clientjo -p 80:3000 clientjo
           EOF
