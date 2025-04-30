@@ -19,17 +19,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copie du projet sur le serveur
+      - name: etape 3 Pull + Build et run Docker
         run: |
-          ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 "rm -rf ~/apps/clientjo/*"
-          scp -r . deploy@167.172.53.237:~/apps/clientjo  # Transfert des fichiers via SCP
-
-      - name: Build et run Docker
-        run: |
-          ssh deploy@167.172.53.237 <<'EOF'
-            cd ~/apps/clientjo/application
+          ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 <<'EOF'
+            cd ~/apps/clientjo
+            git pull origin main
             docker stop clientjo || true
             docker rm clientjo || true
+            cd /application
             docker build -t clientjo .
             docker run -d --name clientjo -p 80:3000 clientjo
           EOF
