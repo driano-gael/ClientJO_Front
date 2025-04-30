@@ -35,5 +35,5 @@ jobs:
             docker rm clientjo || true
             cd ~/apps/clientjo/application
             docker build -t clientjo .
-            docker run -d --name clientjo -p 80:3000 clientjo
+            docker run -d --name clientjo -p 3000:3000 clientjo
           EOF
