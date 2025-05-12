@@ -36,6 +36,6 @@ jobs:
             docker rm clientjo || true
             cd ~/apps/clientjo/application
             docker build -t clientjo .
-            docker run -d --name clientjo -p 3000:3000 --restart unless-stopped adminjo clientjo
+            docker run -d --name clientjo -p 3000:3000 --restart unless-stopped clientjo
             docker image prune -af
           EOF
