@@ -49,6 +49,7 @@ jobs:
       - name: etape 4 Gestion Docker
         run: |
           ssh -o StrictHostKeyChecking=no deploy@167.172.53.237 <<'EOF'
+            set -e
             systemctl is-active docker || sudo systemctl start docker
             docker stop clientjo || true
             docker rm clientjo || true
