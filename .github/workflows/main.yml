@@ -44,7 +44,6 @@ jobs:
             cd ~/apps/clientjo
             git checkout main
             git pull origin main
-            git pull origin main
           EOF
 
       - name: etape 4 Gestion Docker
@@ -54,7 +53,7 @@ jobs:
             docker stop clientjo || true
             docker rm clientjo || true
             cd ~/apps/clientjo/application
-            docker build -t clientjo .
+            docker build --no-cache -t clientjo .
             docker run -d --name clientjo -p 3000:3000 --restart unless-stopped clientjo
             docker image prune -af
           EOF
