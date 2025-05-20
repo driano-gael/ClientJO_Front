@@ -50,6 +50,7 @@ jobs:
             docker rm clientjo || true
 
             echo "[+] Build de l’image Docker (verbeux)"
+            export DOCKER_BUILDKIT=1
             cd ~/apps/clientjo/application
             docker build --progress=plain --no-cache -t clientjo .
 
