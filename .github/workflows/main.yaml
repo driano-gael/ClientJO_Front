@@ -1,0 +1,13 @@
+name: Fake GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  fake-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print a fake message
+        run: echo "This is a fake GitHub Action running!"
