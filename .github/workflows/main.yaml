@@ -27,7 +27,28 @@ jobs:
 
       - name: Build React app
         working-directory: ./application
-        run: next build && next export
+        run: npm run build
+
+      - name: Backup current out folder
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            if [ -d /var/www/clientjo/out ]; then
+              rm -rf /var/www/clientjo/out_backup
+              cp -r /var/www/clientjo/out /var/www/clientjo/out_backup
+            fi
+
+      - name: Remove old out folder
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf /var/www/clientjo/out
 
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.7
