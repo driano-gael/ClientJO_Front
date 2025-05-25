@@ -27,7 +27,7 @@ jobs:
 
       - name: Build React app
         working-directory: ./application
-        run: npm run build
+        run: next build && next export
 
       - name: Copy build to server
         uses: appleboy/scp-action@v0.1.7
