@@ -18,12 +18,15 @@ jobs:
           node-version: "22"
 
       - name: Install dependencies
+        working-directory: ./application
         run: npm ci
 
       - name: Run Jest tests
+        working-directory: ./application
         run: npm test
 
       - name: Build React app
+        working-directory: ./application
         run: npm run build
 
       - name: Copy build to server
@@ -32,5 +35,5 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "out/*"
+          source: "application/out/*"
           target: "/var/www/clientjo/out"
