@@ -73,6 +73,3 @@ jobs:
 
       - name: Notify deployment success
         run: echo "Deployment to server successful!"
-      - name: Notify deployment failure
-        if: failure()
-        run: echo "Deployment to server failed!"
