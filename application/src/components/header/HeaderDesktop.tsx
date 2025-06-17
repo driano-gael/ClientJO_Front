@@ -17,10 +17,10 @@ export default function HeaderDesktop() {
           </div>
           <span className='font-bold'>Paris 2024 Tickets</span>
         </div>
-        <div className="flex items-center justify-center gap-6 px-[20px] border border-black rounded-full mx-auto">
-          <Link className="items-center justify-center font-bold text-2xl" href="/">Accueil</Link>
-          <span className="h-6 border-l border-black"></span>
-          <Link className="items-center justify-center font-bold text-2xl" href="/offre">Offres</Link>
+        <div className="flex items-center justify-center border border-black rounded-full mx-auto">
+          <Link className="items-center justify-center font-bold text-2xl px-[40px]" href="/">Accueil</Link>
+          <span className="h-8 border-1 border-black"></span>
+          <Link className="items-center justify-center font-bold text-2xl px-[40px]" href="/offre">Les évènements</Link>
         </div>
         <div className="flex flex-1 items-center justify-end">
           <Link href={"/connexion"}>
