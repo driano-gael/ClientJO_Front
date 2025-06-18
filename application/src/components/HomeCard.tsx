@@ -17,7 +17,6 @@ export default function HomeCard({
 }: Props) {
 
     const isReverse = orientation === 'reverse';
-    const baseDirection = isReverse ? 'flex-col-reverse' : 'flex-col';
     const smDirection = isReverse ? 'lg:flex-row-reverse' : 'lg:flex-row';
 
   return (
