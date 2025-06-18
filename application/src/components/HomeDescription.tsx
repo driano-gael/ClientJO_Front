@@ -9,9 +9,13 @@ export default function HomeDescription() {
         <p className="text-lg text-center mb-8 font-bold">
             Rejoignez nous pour une expérience historique du 26 Juillet au 11 Aout!
         </p>
-        <button className="btn btn-accent border-1 border-black text-black font-bold rounded-full">
-            <Link href="/offre">PRENEZ PLACE</Link>
-        </button>   
+
+        <Link 
+          href="/offre"
+          className="btn bg-[#FF9900] hover:bg-[#ffb84d] text-black border-[#e17d00] font-bold rounded-full px-12"
+        >
+          PRENEZ PLACE
+        </Link>
     </section>
   );
 }

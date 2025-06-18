@@ -2,7 +2,7 @@ import HomeCard from "./HomeCard";
 
 export default function HomePresentation() {
   return (
-    <section className="mx-[10px] sm:mx-[10%] my-[40px] bg-base-100 border-1 border-accent rounded-[20px]">
+    <section className="mx-[3%] my-[40px] bg-base-100 border-1 border-accent rounded-[20px]">
 
         <HomeCard
             title="un évènement inoubliable"
@@ -11,7 +11,7 @@ export default function HomePresentation() {
             speech=" Plus de 10 500 athlètes venus de 206 pays s'affronteront dans 32 sports. Paris devient, pour la troisième fois, la capitale mondiale du sport."
         />
 
-        <div className="h-[1px] w-[75%] bg-accent" />
+        <div className="h-[1px] w-[80%] bg-accent mx-auto" />
 
         <HomeCard
             title="un évènement historique"
@@ -21,7 +21,7 @@ export default function HomePresentation() {
             orientation="reverse"
         />
 
-        <div className="h-[1px] w-[75%] bg-accent" />
+        <div className="h-[1px] w-[80%] bg-accent mx-auto" />
 
         <HomeCard
             title="un évènement populaire"

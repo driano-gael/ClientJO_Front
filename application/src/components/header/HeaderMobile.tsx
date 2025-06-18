@@ -8,7 +8,7 @@ export default function HeaderMobile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-base-100 border-b border-gray-200">
+    <header className="bg-base-100">
       <nav className="flex items-center justify-between px-4 py-2">
 
         {/* Menu burger pour mobile */}
@@ -46,8 +46,6 @@ export default function HeaderMobile() {
           <span className="text-black md:text-xl">Paris 2024 Tickets</span>
         </div>
 
-        
-
         {/* Icône de connexion */}
         <div className="flex items-center ml-4">
           <Link href="/connexion">
@@ -63,7 +61,7 @@ export default function HeaderMobile() {
 
       {/* Menu déroulant pour mobile */}
       {isMenuOpen && (
-        <div className="md:hidden bg-base-100 px-4 pb-4 animate-slide-down">
+        <div className="md:hidden border border-black/20 bg-base-100 px-4 pb-4 animate-slide-down">
           <ul className="flex flex-col text-black gap-4 mt-2 text-lg font-semibold">
             <li>
               <Link href="/" onClick={() => setIsMenuOpen(false)}>Accueil</Link>

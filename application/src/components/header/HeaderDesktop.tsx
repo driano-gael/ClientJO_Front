@@ -17,11 +17,32 @@ export default function HeaderDesktop() {
           </div>
           <span className='font-bold'>Paris 2024 Tickets</span>
         </div>
-        <div className="flex items-center justify-center border border-black rounded-full mx-auto">
-          <Link className="items-center justify-center font-bold text-2xl px-[40px]" href="/">Accueil</Link>
+        {/* <div className="flex items-center justify-center border border-black rounded-full mx-auto">
+          <Link className="items-center justify-center font-bold text-2xl px-[40px] hover:bg-[#ffb84d]" href="/">Accueil</Link>
           <span className="h-8 border-1 border-black"></span>
           <Link className="items-center justify-center font-bold text-2xl px-[40px]" href="/offre">Les évènements</Link>
-        </div>
+        </div> */}
+
+<div className="mx-auto inline-flex items-stretch border border-black rounded-full overflow-hidden">
+  <Link
+    href="/"
+    className="flex-1 flex items-center justify-center text-center font-bold text-xl pr-5 pl-10 py-2 hover:bg-[#ffe0b3] transition-colors duration-300"
+  >
+    Accueil
+  </Link>
+
+  <span className="w-[1px] h-[75%] bg-black self-center" />
+
+  <Link
+    href="/offre"
+    className="flex-1 flex items-center justify-center text-center font-bold text-xl pr-10 pl-5 py-2 whitespace-nowrap hover:bg-[#ffe0b3] transition-colors duration-300"
+  >
+    Les évènements
+  </Link>
+</div>
+
+
+
         <div className="flex flex-1 items-center justify-end">
           <Link href={"/connexion"}>
             <Image
