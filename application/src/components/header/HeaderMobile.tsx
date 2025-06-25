@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import Profile from './Profile';
 
 export default function HeaderMobile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,16 +48,7 @@ export default function HeaderMobile() {
         </div>
 
         {/* Icône de connexion */}
-        <div className="flex items-center ml-4">
-          <Link href="/connexion">
-            <Image
-              src="/images/icone_connexion.png"
-              alt="Connexion"
-              width={40}
-              height={40}
-            />
-          </Link>
-        </div>
+        <Profile />
       </nav>
 
       {/* Menu déroulant pour mobile */}

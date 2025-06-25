@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import Profile from './Profile';
 
 export default function HeaderDesktop() {
   return (
@@ -17,11 +18,6 @@ export default function HeaderDesktop() {
           </div>
           <span className='font-bold'>Paris 2024 Tickets</span>
         </div>
-        {/* <div className="flex items-center justify-center border border-black rounded-full mx-auto">
-          <Link className="items-center justify-center font-bold text-2xl px-[40px] hover:bg-[#ffb84d]" href="/">Accueil</Link>
-          <span className="h-8 border-1 border-black"></span>
-          <Link className="items-center justify-center font-bold text-2xl px-[40px]" href="/offre">Les évènements</Link>
-        </div> */}
 
 <div className="mx-auto inline-flex items-stretch border border-black rounded-full overflow-hidden">
   <Link
@@ -43,16 +39,7 @@ export default function HeaderDesktop() {
 
 
 
-        <div className="flex flex-1 items-center justify-end">
-          <Link href={"/connexion"}>
-            <Image
-              src="/images/icone_connexion.png"
-              alt="Logo JO"
-              width={50}
-              height={50}
-            />
-          </Link>
-        </div>
+        <Profile />
       </nav>
     </header>
   );
