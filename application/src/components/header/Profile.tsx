@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import ModalConnexionDesktop from '../connexion/modalConnexionDesktop';
+import ModalAuthentication from '../connexion/modalAuthentication';
 
 export default function Profile() {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +18,7 @@ export default function Profile() {
               height={50}
             />
       </button>
-      {showModal && <ModalConnexionDesktop onClose={() => setShowModal(false)}/>}
+      {showModal && <ModalAuthentication onClose={() => setShowModal(false)}/>}
     </div>
 
   )};

@@ -35,59 +35,61 @@ export default function RegisterClientForm() {
     };
 
     return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4">
-        <input
-            name="email" 
-            type="email" 
-            placeholder="Email" 
-            value={formData.email} 
-            onChange={handleChange} 
-            required 
-            autoComplete='email'
-            className="w-full border p-2 rounded" 
-        />
-        <input 
-            name="password" 
-            type="password" 
-            placeholder="Mot de passe" 
-            value={formData.password} 
-            onChange={handleChange} 
-            required 
-            autoComplete='current-password'
-            className="w-full border p-2 rounded" 
-        />
-        <input 
-            name="nom" 
-            placeholder="Nom" 
-            value={formData.nom} 
-            onChange={handleChange} 
-            required 
-            autoComplete='family-name'
-            className="w-full border p-2 rounded" 
-        />
-        <input 
-            name="prenom" 
-            placeholder="Prénom" 
-            value={formData.prenom} 
-            onChange={handleChange} 
-            required
-            autoComplete='given-name'
-            className="w-full border p-2 rounded" 
-        />
-        <input 
-            name="telephone" 
-            placeholder="Téléphone" 
-            value={formData.telephone} 
-            onChange={handleChange} 
-            required 
-            className="w-full border p-2 rounded" 
-        />
-        <button 
-            type="submit" 
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-            S’inscrire
-        </button>
-    </form>
+    <>
+        <form onSubmit={handleSubmit} className="space-y-4 p-4">
+            <input
+                name="email" 
+                type="email" 
+                placeholder="Email" 
+                value={formData.email} 
+                onChange={handleChange} 
+                required 
+                autoComplete='email'
+                className="w-full border p-2 rounded" 
+            />
+            <input 
+                name="password" 
+                type="password" 
+                placeholder="Mot de passe" 
+                value={formData.password} 
+                onChange={handleChange} 
+                required 
+                autoComplete='current-password'
+                className="w-full border p-2 rounded" 
+            />
+            <input 
+                name="nom" 
+                placeholder="Nom" 
+                value={formData.nom} 
+                onChange={handleChange} 
+                required 
+                autoComplete='family-name'
+                className="w-full border p-2 rounded" 
+            />
+            <input 
+                name="prenom" 
+                placeholder="Prénom" 
+                value={formData.prenom} 
+                onChange={handleChange} 
+                required
+                autoComplete='given-name'
+                className="w-full border p-2 rounded" 
+            />
+            <input 
+                name="telephone" 
+                placeholder="Téléphone" 
+                value={formData.telephone} 
+                onChange={handleChange} 
+                required 
+                className="w-full border p-2 rounded" 
+            />
+            <button 
+                type="submit" 
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+                S’inscrire
+            </button>
+        </form>
+    </>
     );
 }
