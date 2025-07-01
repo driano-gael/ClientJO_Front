@@ -16,6 +16,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Clean npm cache
+        run: npm cache clean --force
+        working-directory: ./application
 
       - name: Install dependencies
         working-directory: ./application
