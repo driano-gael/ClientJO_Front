@@ -39,16 +39,17 @@ export default function RegisterClientForm({onClick}: Props) {
         });
     }, []);
 
-    const processError = useCallback((err: any) => {
-        if (err.data) {
+    const processError = useCallback((err: unknown) => {
+        if (err && typeof err === 'object' && 'data' in err) {
+            const errorData = (err as { data: Record<string, string | string[]> }).data;
             const errorMessages = [];
-            for (const [field, messages] of Object.entries(err.data)) {
+            for (const [field, messages] of Object.entries(errorData)) {
                 const message = Array.isArray(messages) ? messages.join(', ') : messages;
                 errorMessages.push(`${field}: ${message}`);
             }
             return errorMessages.join(' | ');
         }
-        return err.message || 'Erreur inconnue';
+        return err instanceof Error ? err.message : 'Erreur inconnue';
     }, []);
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
@@ -73,7 +74,7 @@ export default function RegisterClientForm({onClick}: Props) {
         }, 1000);
         
         try {
-            const res = await registerClient(formData);
+            await registerClient(formData);
             setSuccessMessage('Inscription réussie ! Vous pouvez maintenant vous connecter.');
             setNotificationType('success');
             setShowNotification(true);
@@ -84,7 +85,7 @@ export default function RegisterClientForm({onClick}: Props) {
                 }
             }, 2000);
             
-        } catch (err: any) {
+        } catch (err: unknown) {
             const errorMessage = processError(err);
             setError(errorMessage);
             setNotificationType('error');
@@ -169,19 +170,17 @@ export default function RegisterClientForm({onClick}: Props) {
                             className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <label htmlFor="acceptTerms" className="text-sm text-black">
-                            J'accepte les{' '}
+                            J&apos;accepte les{' '}
                             <button 
                                 type="button" 
                                 className="text-blue-600 underline hover:text-blue-800"
-                                onClick={() => console.log('Ouvrir CGU')}
                             >
-                                Conditions Générales d'Utilisation
+                                Conditions Générales d&apos;Utilisation
                             </button>
                             {' '}et la{' '}
                             <button 
                                 type="button" 
                                 className="text-blue-600 underline hover:text-blue-800"
-                                onClick={() => console.log('Ouvrir politique de confidentialité')}
                             >
                                 Politique de Confidentialité
                             </button>

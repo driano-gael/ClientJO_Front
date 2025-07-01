@@ -10,6 +10,11 @@ type Props = {
   onLoginSuccess?: () => void;
 }
 
+type LoginResponse = {
+  access: string;
+  refresh: string;
+}
+
 export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,7 +42,7 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
     }, 1000);
     
     try {
-      const res = await login({ email, password });
+      const res = await login({ email, password }) as LoginResponse;
       if (res.access) {
         localStorage.setItem(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'auth_token', res.access);
         if (onLoginSuccess) {
@@ -49,8 +54,9 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
         setError('Token non reçu');
         setShowNotification(true);
       }
-    } catch (err: any) {
-      setError(err.message || 'Erreur inconnue');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+      setError(errorMessage);
       setShowNotification(true);
     } finally {
       setIsLoading(false);
@@ -106,7 +112,7 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
             <button onClick={onClick}
               className="font-bold underline"
             >
-              S'inscrire
+              S&apos;inscrire
             </button>
         </div>
       </div>

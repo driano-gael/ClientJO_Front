@@ -9,7 +9,7 @@ if (!baseUrl) throw new Error("API base URL is not défini.");
 if (!tokenKey) throw new Error("NEXT_PUBLIC_AUTH_TOKEN_KEY est manquant.");
 if (!refreshKey) throw new Error("NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY est manquant.");
 
-export async function fetchApi<T = any>(
+export async function fetchApi<T = unknown>(
     endpoint: string,
     options: RequestInit = {},
     requiresAuth = false
@@ -30,7 +30,7 @@ export async function fetchApi<T = any>(
         ? await response.json().catch(() => ({}))
         : {};
     const error = new Error(`(${response.status}) ${errorData.detail || response.statusText}`);
-    (error as any).data = errorData;
+    (error as Error & { data: unknown }).data = errorData;
     throw error;
     }
     return contentType.includes("application/json")

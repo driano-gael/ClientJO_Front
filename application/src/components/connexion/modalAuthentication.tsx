@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import LoginClientForm from './LoginClientForm';
 import RegisterClientForm from './RegisterClientForm';
 
@@ -25,7 +26,7 @@ export default function ModalAuthentication({onClose}: Props) {
             className="absolute top-2 right-2 hover:opacity-70 transition-opacity"
             aria-label="Fermer"
           >
-            <img 
+            <Image 
               src="/images/close-arrow(24).png" 
               alt="Fermer" 
               width={24} 
