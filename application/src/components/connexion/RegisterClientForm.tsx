@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react';
 import { registerClient } from '@/lib/api/authService';
 import Notification from '../Notification';
 import Spinner from '../Spinner';
+import { validateClientForm } from '@/utils/validateForms';
 
 type Props = {
   onClick?: () => void;
@@ -58,33 +59,29 @@ export default function RegisterClientForm({onClick}: Props) {
             return;
         }
         
-        setError(null);
-        setIsLoading(true);
-        
-        if (!acceptTerms) {
-            setError('Vous devez accepter les CGU et la politique de confidentialité');
+        const validationErrors = validateClientForm({ ...formData, acceptTerms });
+        if (Object.keys(validationErrors).length > 0) {
+            const firstErrorKey = Object.keys(validationErrors)[0] as keyof typeof validationErrors;
+            setError(validationErrors[firstErrorKey] || 'Erreur de validation');
             setNotificationType('error');
             setShowNotification(true);
-            setIsLoading(false);
             return;
         }
-        
+        setError(null);
+        setIsLoading(true);
         submitTimeoutRef.current = setTimeout(() => {
             submitTimeoutRef.current = null;
         }, 1000);
-        
         try {
             await registerClient(formData);
             setSuccessMessage('Inscription réussie ! Vous pouvez maintenant vous connecter.');
             setNotificationType('success');
             setShowNotification(true);
-            
             setTimeout(() => {
                 if (onClick) {
                     onClick();
                 }
             }, 2000);
-            
         } catch (err: unknown) {
             const errorMessage = processError(err);
             setError(errorMessage);
