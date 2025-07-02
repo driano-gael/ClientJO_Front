@@ -19,7 +19,7 @@ jest.mock('@/components/Spinner', () => ({
 describe('RegisterClientForm', () => {
   const fillForm = () => {
     fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText('Mot de passe'), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByPlaceholderText('Mot de passe'), { target: { value: '@Password12345' } });
     fireEvent.change(screen.getByPlaceholderText('Nom'), { target: { value: 'Doe' } });
     fireEvent.change(screen.getByPlaceholderText('Prénom'), { target: { value: 'John' } });
     fireEvent.change(screen.getByPlaceholderText('Téléphone'), { target: { value: '0123456789' } });
@@ -42,7 +42,7 @@ describe('RegisterClientForm', () => {
         target: { value: 'test@example.com' },
     });
     fireEvent.change(screen.getByPlaceholderText(/mot de passe/i), {
-        target: { value: 'password123' },
+        target: { value: '@Password12345' },
     });
     fireEvent.change(screen.getByPlaceholderText('Nom'), {
         target: { value: 'Doe' },
@@ -70,7 +70,7 @@ describe('RegisterClientForm', () => {
     await waitFor(() => {
       expect(registerClient).toHaveBeenCalledWith({
         email: 'test@example.com',
-        password: 'password123',
+        password: '@Password12345',
         nom: 'Doe',
         prenom: 'John',
         telephone: '0123456789',
