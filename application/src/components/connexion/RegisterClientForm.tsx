@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { registerClient } from '@/lib/api/authService';
+import { registerClient } from '@/lib/api/auth/authService';
 import Notification from '../Notification';
 import Spinner from '../Spinner';
 import { validateClientForm } from '@/utils/validateForms';

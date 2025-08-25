@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { login } from '@/lib/api/authService';
+import { login } from '@/lib/api/auth/authService';
 import Notification from '../Notification';
 import Spinner from '../Spinner';
 

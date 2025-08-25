@@ -1,7 +1,7 @@
-import { login, logout, registerClient, refreshToken} from '@/lib/api/authService'
-import { fetchApi } from '@/lib/api/fetchWrapper';
+import { login, logout, registerClient, refreshToken} from '@/lib/api/auth/authService'
+import { fetchApi } from '@/lib/api/auth/fetchWrapper';
 
-jest.mock('@/lib/api/fetchWrapper');
+jest.mock('@/lib/api/auth/fetchWrapper');
 
 describe('Auth functions', () => {
   beforeEach(() => {

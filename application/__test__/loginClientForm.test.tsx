@@ -1,9 +1,9 @@
 // __test__/LoginClientForm.test.tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import LoginClientForm from '@/components/connexion/LoginClientForm';
-import { login as mockLogin } from '@/lib/api/authService';
+import { login as mockLogin } from '@/lib/api/auth/authService';
 
-jest.mock('@/lib/api/authService', () => ({
+jest.mock('@/lib/api/auth/authService', () => ({
   login: jest.fn(),
 }));
 

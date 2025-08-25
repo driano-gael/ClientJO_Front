@@ -59,7 +59,7 @@ export default function HeaderMobile() {
               <Link href="/" onClick={() => setIsMenuOpen(false)}>Accueil</Link>
             </li>
             <li>
-              <Link href="/offre" onClick={() => setIsMenuOpen(false)}>Offres</Link>
+              <Link href="/evenements" onClick={() => setIsMenuOpen(false)}>Evenements</Link>
             </li>
           </ul>
         </div>

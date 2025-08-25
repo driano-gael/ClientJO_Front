@@ -11,7 +11,7 @@ export default function HomeDescription() {
         </p>
 
         <Link 
-          href="/offre"
+          href="/evenements"
           className="btn bg-[#FF9900] hover:bg-[#ffb84d] text-black border-[#e17d00] font-bold rounded-full px-12"
         >
           PRENEZ PLACE

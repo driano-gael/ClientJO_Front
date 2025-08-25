@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RegisterClientForm from '@/components/connexion/RegisterClientForm';
-import { registerClient } from '@/lib/api/authService';
+import { registerClient } from '@/lib/api/auth/authService';
 
-jest.mock('@/lib/api/authService', () => ({
+jest.mock('@/lib/api/auth/authService', () => ({
   registerClient: jest.fn(),
 }));
 

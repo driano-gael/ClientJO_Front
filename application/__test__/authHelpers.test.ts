@@ -1,4 +1,4 @@
-import { buildHeaders, makeRequest, tryRefreshToken } from '@/lib/api/authHelpers';
+import { buildHeaders, makeRequest, tryRefreshToken } from '@/lib/api/auth/authHelpers';
 
 describe('authHelpers', () => {
   const originalFetch = global.fetch;

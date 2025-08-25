@@ -1,4 +1,4 @@
-import { fetchApi } from './fetchWrapper';
+import { fetchApi } from '@/lib/api/core/fetchWrappers';
 
 export async function login(
     dataForm:{
@@ -7,24 +7,21 @@ export async function login(
     }) 
 {
     const data = await fetchApi('/auth/login/', {
-    method: 'POST',
-    body: JSON.stringify(dataForm),
+      method: 'POST',
+      body: JSON.stringify(dataForm),
     }) as { access: string; refresh: string };
     if (!data.access) {
         throw new Error('Token non trouvé dans la réponse du serveur.');
     }
-
     const tokenKey = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY;
     const refreshKey = process.env.NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY;
-
     if (!tokenKey || !refreshKey) {
         throw new Error('Clé de token manquante dans les variables d’environnement');
     }
-
     localStorage.setItem(tokenKey, data.access);
     localStorage.setItem(refreshKey, data.refresh);
-        return data;
-    }
+    return data;
+}
 
 export function logout() {
     localStorage.removeItem(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY!);
@@ -39,7 +36,7 @@ export async function registerClient(
         telephone: string;
     })
 {
-    return await fetchApi('/auth/register/client', {
+    return await fetchApi('/auth/register/client/', {
         method: 'POST',
         body: JSON.stringify({
         email: data.email,
@@ -57,7 +54,7 @@ export async function refreshToken() {
   const refresh = localStorage.getItem(refreshKey);
   if (!refresh) throw new Error("Refresh token manquant");
 
-  const data = await fetchApi('/auth/token/refresh/', {
+  const data = await fetchApi('/auth/refresh/', {
     method: 'POST',
     body: JSON.stringify({ refresh }),
   }) as { access: string; refresh: string };

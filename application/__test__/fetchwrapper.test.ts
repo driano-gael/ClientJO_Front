@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api/fetchWrapper';
+import { fetchApi } from '@/lib/api/core/fetchWrappers';
 
 describe('fetchApi', () => {
   const originalFetch = global.fetch;

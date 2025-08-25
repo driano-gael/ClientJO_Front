@@ -30,7 +30,7 @@ export default function HeaderDesktop() {
   <span className="w-[1px] h-[75%] bg-black self-center" />
 
   <Link
-    href="/offre"
+    href="/evenements"
     className="flex-1 flex items-center justify-center text-center font-bold text-xl pr-10 pl-5 py-2 whitespace-nowrap hover:bg-[#ffe0b3] transition-colors duration-300"
   >
     Les évènements
