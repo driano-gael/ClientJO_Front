@@ -2,8 +2,8 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { login } from '@/lib/api/auth/authService';
-import Notification from '../Notification';
-import Spinner from '../Spinner';
+import Notification from '../common/Notification';
+import Spinner from '../common/Spinner';
 
 type Props = {
   onClick: () => void;

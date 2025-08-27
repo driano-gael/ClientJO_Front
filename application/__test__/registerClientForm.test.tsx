@@ -6,12 +6,12 @@ jest.mock('@/lib/api/auth/authService', () => ({
   registerClient: jest.fn(),
 }));
 
-jest.mock('@/components/Notification', () => ({
+jest.mock('@/components/common/Notification', () => ({
   __esModule: true,
   default: ({ message }: { message: string }) => <div>{message}</div>,
 }));
 
-jest.mock('@/components/Spinner', () => ({
+jest.mock('@/components/common/Spinner', () => ({
   __esModule: true,
   default: () => <div data-testid="spinner" />,
 }));

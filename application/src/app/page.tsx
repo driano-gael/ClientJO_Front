@@ -1,6 +1,6 @@
 import Header from "@/components/header/Header";
-import HomeDescription from "@/components/HomeDescription";
-import HomePresentation from "@/components/HomePresentation";
+import HomeDescription from "@/components/home/HomeDescription";
+import HomePresentation from "@/components/home/HomePresentation";
 
 export default function Home() {
   return (
