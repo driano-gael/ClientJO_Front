@@ -12,6 +12,7 @@ export default function CardEvenement(){
     <>
       <div className="text-black bg-red-400 w-[100px] h-[100px] flex-col">
         <div>
+          <p>hello you</p>
         </div>
       </div>
     </>
