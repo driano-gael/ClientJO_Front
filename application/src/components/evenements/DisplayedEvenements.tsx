@@ -1,8 +1,11 @@
+import CardEvenement from "@/components/evenements/CardEvenement";
+
 export default function DisplayedEvenements(){
   return (
     <>
-      <div className="text-black w-full h-[300px] flex items-center justify-center">
-        <h2 className="text-2xl font-bold">Displayed Evenements Placeholder</h2>
+      <div className="flex gap-2">
+          <CardEvenement></CardEvenement>
+          <CardEvenement></CardEvenement>
       </div>
     </>
   )

@@ -1,22 +1,46 @@
-// import CardEvenement from "@/components/evenements/CardEvenement";
-import {useState} from "react";
+import { useEffect, useState } from "react";
+import CardEvenement from "@/components/evenements/CardEvenement";
 
-export default function CarousselEvenements(){
-const images = [
-    { src: "https://picsum.photos/id/1018/600/300", title: "Image 1" },
-    { src: "https://picsum.photos/id/1015/600/300", title: "Image 2" },
-    { src: "https://picsum.photos/id/1019/600/300", title: "Image 3" },
-    { src: "https://picsum.photos/id/1020/600/300", title: "Image 4" },
-    { src: "https://picsum.photos/id/1021/600/300", title: "Image 5" },
-    { src: "https://picsum.photos/id/1022/600/300", title: "Image 6" }
+export default function CarousselEvenements() {
+  const cards = [
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
+    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
   ];
 
   const [current, setCurrent] = useState(0);
-  const visible = 3; // nombre d’images visibles
+  const [visible, setVisible] = useState(2);
+
+  useEffect(() => {
+    const updateVisible = () => {
+      const width = window.innerWidth;
+      if (width < 640) setVisible(1);
+      else if (width < 1024) setVisible(2);
+      else if (width < 1536) setVisible(3);
+      else setVisible(4);
+
+      setCurrent(0); // reset pour éviter cartes tronquées
+    };
+
+    updateVisible();
+    window.addEventListener("resize", updateVisible);
+    return () => window.removeEventListener("resize", updateVisible);
+  }, []);
+
+  const cardWidth = 100 / visible;
 
   const nextSlide = () => {
-    if (current >= images.length - visible) {
-      setCurrent(0); // boucle au début
+    // Si la dernière carte visible est la dernière du tableau => reset à 0
+    if (current + visible >= cards.length) {
+      setCurrent(0);
     } else {
       setCurrent((prev) => prev + 1);
     }
@@ -24,58 +48,47 @@ const images = [
 
   const prevSlide = () => {
     if (current === 0) {
-      setCurrent(images.length - visible); // boucle à la fin
+      setCurrent(cards.length - visible);
     } else {
       setCurrent((prev) => prev - 1);
     }
   };
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto">
-      {/* Zone visible */}
-      <div className="overflow-hidden">
-        <div
-          className="flex transition-transform duration-500"
-          style={{
-            width: `${(images.length / visible) * 100}%`,
-            transform: `translateX(-${(current * 100) / images.length}%)`
-          }}
-        >
-          {images.map((item, index) => (
-            <div
-              key={index}
-              className="p-2"
-              style={{ width: `${100 / images.length}%` }}
-            >
-              <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300">
-                <img
-                  src={item.src}
-                  alt={item.title}
-                  className="w-full aspect-video object-cover rounded-t-2xl"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className="relative w-full overflow-hidden">
+      <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${current * cardWidth}%)` }}>
+        {cards.map((item, index) => (
+          <div key={index} style={{ flex: `0 0 ${cardWidth}%`, boxSizing: "border-box", padding: "0.5rem" }}>
+            <CardEvenement
+              date={item.date}
+              discipline={item.discipline}
+              gender={item.gender}
+              categorie={item.categorie}
+              tour={item.tour}
+              lieu={item.lieu}
+              heure={item.heure}
+            />
+          </div>
+        ))}
       </div>
 
-      {/* Boutons toujours visibles */}
-      <button
-        onClick={prevSlide}
-        className="absolute top-1/2 left-3 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
-      >
-        ‹
-      </button>
+      {/* Boutons navigation */}
+  <button
+    onClick={prevSlide}
+    className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition z-50"
+    style={{ left: '-20px' }}
+  >
+    ‹
+  </button>
 
-      <button
-        onClick={nextSlide}
-        className="absolute top-1/2 right-3 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
-      >
-        ›
-      </button>
+  {/* Flèche droite */}
+  <button
+    onClick={nextSlide}
+    className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
+    style={{ right: '-20px' }}
+  >
+    ›
+  </button>
     </div>
   );
 }

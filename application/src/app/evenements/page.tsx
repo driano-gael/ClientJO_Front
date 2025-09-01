@@ -8,20 +8,25 @@ export default function Evenements() {
   return (
     <>
       <Header/>
-      <div className="bg-base-200">
-            <div className="pt-4 pb-4">
-              <SearchEvenements/>
-            </div>
+        <div className="bg-base-200">
+            <div  className="w-[90%] mx-auto">
+                <div className="pt-4 pb-4">
+                  <SearchEvenements/>
+                </div>
+
+                <div>
+                    <p className="font-extrabold">A VENIR</p>
+                    <hr className="border-1"/>
+                    <CarousselEvenements/>
+                </div>
 
             <div>
-              <CarousselEvenements/>
-            </div>
-
-            <div>
-              <DisplayedEvenements/>
+                <p className="font-extrabold">A L&apos;AFFICHE</p>
+                <hr className="border-1"/>
+                <DisplayedEvenements/>
             </div>
       </div>
-
+</div>
     </>
   );
 }
