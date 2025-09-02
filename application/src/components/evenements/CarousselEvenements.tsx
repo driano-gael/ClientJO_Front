@@ -1,48 +1,48 @@
-import { useEffect, useState } from "react";
+
+
+import { useState, useEffect } from "react";
 import CardEvenement from "@/components/evenements/CardEvenement";
 
-export default function CarousselEvenements() {
-  const cards = [
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-    { date: "Vendredi 2 Aout", discipline: "BOXE", gender: "Hommes", categorie: "-80Kg", tour: "1/8 DE FINALE", lieu: "Paris Nord Villepinte", heure: "17h" },
-  ];
+type CardType = {
+  date: string;
+  discipline: string;
+  gender: string;
+  categorie: string;
+  tour: string;
+  lieu: string;
+  heure: string;
+};
 
+interface CarousselEvenementsProps {
+  cards: CardType[];
+}
+
+export default function CarousselEvenements({ cards }: CarousselEvenementsProps) {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(2);
+  const [startX, setStartX] = useState<number | null>(null);
 
+  // Calcul dynamique du nombre de cartes visibles
   useEffect(() => {
     const updateVisible = () => {
       const width = window.innerWidth;
-      if (width < 640) setVisible(1);
-      else if (width < 1024) setVisible(2);
-      else if (width < 1536) setVisible(3);
-      else setVisible(4);
-
-      setCurrent(0); // reset pour éviter cartes tronquées
+      // const cols = Math.floor(width / 180); // largeur approximative par carte
+      setVisible(Math.ceil(width / 250));
+      setCurrent(0);
     };
-
     updateVisible();
     window.addEventListener("resize", updateVisible);
     return () => window.removeEventListener("resize", updateVisible);
-  }, []);
+  }, [cards.length]);
 
   const cardWidth = 100 / visible;
 
+  // Navigation boutons
   const nextSlide = () => {
-    // Si la dernière carte visible est la dernière du tableau => reset à 0
     if (current + visible >= cards.length) {
       setCurrent(0);
     } else {
-      setCurrent((prev) => prev + 1);
+      setCurrent(current + 1);
     }
   };
 
@@ -50,45 +50,71 @@ export default function CarousselEvenements() {
     if (current === 0) {
       setCurrent(cards.length - visible);
     } else {
-      setCurrent((prev) => prev - 1);
+      setCurrent(current - 1);
+    }
+  };
+
+  // Swipe tactile
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (startX === null) return;
+    const diff = startX - e.touches[0].clientX;
+    if (diff > 50) {
+      nextSlide();
+      setStartX(null);
+    } else if (diff < -50) {
+      prevSlide();
+      setStartX(null);
     }
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
-      <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${current * cardWidth}%)` }}>
+    <div className="relative w-full overflow-visible">
+      <div className="overflow-hidden bg-base-300 rounded-tl-[20px] rounded-br-[20px]">
+      <div
+        className="flex transition-transform duration-500"
+        style={{ transform: `translateX(-${current * cardWidth}%)` }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
         {cards.map((item, index) => (
-          <div key={index} style={{ flex: `0 0 ${cardWidth}%`, boxSizing: "border-box", padding: "0.5rem" }}>
-            <CardEvenement
-              date={item.date}
-              discipline={item.discipline}
-              gender={item.gender}
-              categorie={item.categorie}
-              tour={item.tour}
-              lieu={item.lieu}
-              heure={item.heure}
-            />
+          <div
+            key={index}
+            style={{
+              flex: `0 0 ${cardWidth}%`,
+              maxWidth: `${cardWidth}%`,
+              boxSizing: "border-box",
+              padding: "0.5rem",
+            }}
+          >
+            <CardEvenement {...item} />
           </div>
         ))}
       </div>
+      </div>
 
       {/* Boutons navigation */}
-  <button
-    onClick={prevSlide}
-    className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition z-50"
-    style={{ left: '-20px' }}
-  >
-    ‹
-  </button>
-
-  {/* Flèche droite */}
-  <button
-    onClick={nextSlide}
-    className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
-    style={{ right: '-20px' }}
-  >
-    ›
-  </button>
+      <button
+        onClick={prevSlide}
+        className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
+        style={{ left: "-15px" }}
+      >
+        ‹
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition"
+        style={{ right: "-15px" }}
+      >
+        ›
+      </button>
     </div>
   );
 }
+
+
+
+
