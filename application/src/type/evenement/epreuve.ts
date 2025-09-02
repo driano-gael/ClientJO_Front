@@ -6,4 +6,16 @@ export interface Epreuve {
   libelle: string;
   discipline: Discipline;
   evenement?: Evenement | null;
+  genre: string;
+  tour: string;
+}
+
+export interface EpreuveCardType {
+  date: string;
+  discipline: string;
+  genre: string;
+  libelle: string;
+  tour: string;
+  lieu: string;
+  heure: string;
 }

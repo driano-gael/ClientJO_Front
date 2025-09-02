@@ -5,7 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
-  ReactNode,
+  ReactNode, useCallback,
 } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -67,32 +67,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // tentative de restauration
-  const tryRestoreUserFromStorage = (): boolean => {
-    const userData = loadUserFromLocalStorage();
-    if (userData) {
-      setUser(userData);
-      return true;
-    } else {
-      logoutService();
-      return false;
-    }
-  };
+const tryRestoreUserFromStorage = useCallback((): boolean => {
+  const userData = loadUserFromLocalStorage();
+  if (userData) {
+    setUser(userData);
+    return true;
+  } else {
+    logoutService();
+    return false;
+  }
+}, []);
 
   // 🔒 Forcer la déconnexion (expiration de session)
-  const forceLogout = () => {
-    if (typeof window !== 'undefined') {
-      const currentPath = window.location.pathname;
-      if (currentPath !== '/' && currentPath !== '/login') {
-        setCurrentRoute(currentPath);
-      }
+const forceLogout = useCallback(() => {
+  if (typeof window !== 'undefined') {
+    const currentPath = window.location.pathname;
+    if (currentPath !== '/' && currentPath !== '/login') {
+      setCurrentRoute(currentPath);
     }
-    logoutService();
-    localStorage.removeItem('email');
-    localStorage.removeItem('nom');
-    localStorage.removeItem('id');
-    setUser(null);
-    setShowSessionExpiredModal(true);
-  };
+  }
+  logoutService();
+  localStorage.removeItem('email');
+  localStorage.removeItem('nom');
+  localStorage.removeItem('id');
+  setUser(null);
+  setShowSessionExpiredModal(true);
+}, []);
 
   const handleSessionExpired = () => {
     setShowSessionExpiredModal(false);
@@ -140,7 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.removeEventListener('tokenRefreshed', handleTokenRefreshed);
       }
     };
-  }, []);
+  }, [tryRestoreUserFromStorage, forceLogout]);
 
   // 🔓 login
   const login = async (email: string, password: string) => {

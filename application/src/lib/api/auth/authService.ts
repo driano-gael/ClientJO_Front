@@ -36,7 +36,7 @@ export async function registerClient(
         telephone: string;
     })
 {
-    return await fetchApi('/auth/register/client/', {
+    return await fetchApi('/auth/register/client', {
         method: 'POST',
         body: JSON.stringify({
         email: data.email,
@@ -54,7 +54,7 @@ export async function refreshToken() {
   const refresh = localStorage.getItem(refreshKey);
   if (!refresh) throw new Error("Refresh token manquant");
 
-  const data = await fetchApi('/auth/refresh/', {
+  const data = await fetchApi('/auth/token/refresh/', {
     method: 'POST',
     body: JSON.stringify({ refresh }),
   }) as { access: string; refresh: string };

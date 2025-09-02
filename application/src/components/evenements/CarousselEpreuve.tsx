@@ -1,23 +1,15 @@
 
 
 import { useState, useEffect } from "react";
-import CardEvenement from "@/components/evenements/CardEvenement";
+import {EpreuveCardType} from "@/type/evenement/epreuve";
+import CardEpreuve from "@/components/evenements/CardEpreuve";
 
-type CardType = {
-  date: string;
-  discipline: string;
-  gender: string;
-  categorie: string;
-  tour: string;
-  lieu: string;
-  heure: string;
-};
 
-interface CarousselEvenementsProps {
-  cards: CardType[];
+interface Props {
+  epreuves?: EpreuveCardType[];
 }
 
-export default function CarousselEvenements({ cards }: CarousselEvenementsProps) {
+export default function CarousselEpreuve({ epreuves = [] }: Props) {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(2);
   const [startX, setStartX] = useState<number | null>(null);
@@ -33,13 +25,13 @@ export default function CarousselEvenements({ cards }: CarousselEvenementsProps)
     updateVisible();
     window.addEventListener("resize", updateVisible);
     return () => window.removeEventListener("resize", updateVisible);
-  }, [cards.length]);
+  }, [epreuves]);
 
   const cardWidth = 100 / visible;
 
   // Navigation boutons
   const nextSlide = () => {
-    if (current + visible >= cards.length) {
+    if (current + visible >= epreuves.length) {
       setCurrent(0);
     } else {
       setCurrent(current + 1);
@@ -48,7 +40,7 @@ export default function CarousselEvenements({ cards }: CarousselEvenementsProps)
 
   const prevSlide = () => {
     if (current === 0) {
-      setCurrent(cards.length - visible);
+      setCurrent(epreuves.length - visible);
     } else {
       setCurrent(current - 1);
     }
@@ -80,7 +72,7 @@ export default function CarousselEvenements({ cards }: CarousselEvenementsProps)
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
       >
-        {cards.map((item, index) => (
+        {epreuves.map((epreuve, index) => (
           <div
             key={index}
             style={{
@@ -90,7 +82,7 @@ export default function CarousselEvenements({ cards }: CarousselEvenementsProps)
               padding: "0.5rem",
             }}
           >
-            <CardEvenement {...item} />
+            <CardEpreuve epreuve={epreuve} />
           </div>
         ))}
       </div>

@@ -1,4 +1,5 @@
-import { buildHeaders, makeRequest, tryRefreshToken } from '@/lib/api/auth/authHelpers';
+// import { buildHeaders, makeRequest, tryRefreshToken } from '@/lib/api/core/httpHelpers;
+import { buildHeaders, makeRequest, tryRefreshToken } from "@/lib/api/core/httpHelpers";
 
 describe('authHelpers', () => {
   const originalFetch = global.fetch;
@@ -49,6 +50,21 @@ describe('authHelpers', () => {
       const headers = buildHeaders(false);
       expect(headers).toEqual({ 'Content-Type': 'application/json' });
     });
+
+    it('remplace Authorization si déjà présent dans baseHeaders', () => {
+      localStorage.setItem(tokenKey, 'fake-token');
+      const baseHeaders = { Authorization: 'Bearer old-token' };
+      const headers = buildHeaders(true, baseHeaders);
+      let authorizationValue;
+      if (headers instanceof Headers) {
+        authorizationValue = headers.get('Authorization');
+      } else if (Array.isArray(headers)) {
+        authorizationValue = Object.fromEntries(headers)['Authorization'];
+      } else {
+        authorizationValue = headers['Authorization'];
+      }
+      expect(authorizationValue).toBe('Bearer fake-token');
+    });
   });
 
   describe('makeRequest', () => {
@@ -91,6 +107,23 @@ describe('authHelpers', () => {
         })
       );
     });
+
+    it('retourne une erreur si fetch échoue', async () => {
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+      await expect(makeRequest('/endpoint', { method: 'GET' }, false)).rejects.toThrow('Network error');
+    });
+
+    it('retourne une erreur si fetch retourne ok=false', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        headers: {
+          get: () => 'application/json',
+        },
+        json: () => Promise.resolve({ error: 'fail' }),
+      });
+      await expect(makeRequest('/endpoint', { method: 'GET' }, false)).rejects.toThrow();
+    });
   });
 
   describe('tryRefreshToken', () => {
@@ -109,6 +142,13 @@ describe('authHelpers', () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
       });
+      const result = await tryRefreshToken();
+      expect(result).toBe(false);
+    });
+
+    it('retourne false si fetch lance une exception', async () => {
+      localStorage.setItem(refreshTokenKey, 'refresh-token');
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
       const result = await tryRefreshToken();
       expect(result).toBe(false);
     });
