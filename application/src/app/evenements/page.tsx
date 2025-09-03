@@ -43,9 +43,18 @@ export default function Evenements() {
 
     // Filtre par date minimum (toutes les épreuves à partir de cette date)
     if (filters.date) {
-      filtered = filtered.filter(epreuve =>
-        new Date(epreuve.date).getTime() >= new Date(filters.date!).getTime()
-      );
+      filtered = filtered.filter(epreuve => {
+        if (!epreuve.dateRaw) return false;
+        // Utiliser dateRaw qui contient la date brute au format ISO
+        const epreuveDate = new Date(epreuve.dateRaw);
+        const filterDate = new Date(filters.date!);
+
+        // Comparer les dates en normalisant à minuit
+        const epreuveDateOnly = new Date(epreuveDate.getFullYear(), epreuveDate.getMonth(), epreuveDate.getDate());
+        const filterDateOnly = new Date(filterDate.getFullYear(), filterDate.getMonth(), filterDate.getDate());
+
+        return epreuveDateOnly >= filterDateOnly;
+      });
     }
 
     // Filtre par tour (gardé pour la compatibilité desktop)
@@ -60,7 +69,8 @@ export default function Evenements() {
       filtered.sort((a, b) => {
         let comparison = 0;
         if (filters.sortBy === 'date') {
-          comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+          // Utiliser dateRaw pour les comparaisons de tri
+          comparison = new Date(a.dateRaw).getTime() - new Date(b.dateRaw).getTime();
         } else if (filters.sortBy === 'libelle') {
           comparison = a.libelle.localeCompare(b.libelle);
         }
@@ -73,7 +83,7 @@ export default function Evenements() {
 
   // Tri des 10 prochaines épreuves par date la plus récente
   const epreuvesCarrousel = [...epreuveCards]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => new Date(b.dateRaw).getTime() - new Date(a.dateRaw).getTime()) // Utiliser dateRaw ici aussi
     .slice(0, 10);
 
   // Fonction pour mettre à jour les filtres

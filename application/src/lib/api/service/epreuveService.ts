@@ -45,14 +45,14 @@ export class EpreuveService {
 
 export function mapEpreuveToCard(epreuve: Epreuve): EpreuveCardType {
   return {
-    date: formatDateFr(epreuve.evenement?.date) || "Date Inconue",
+    date: formatDateFr(epreuve.evenement?.date) || "Date Inconnue",
+    dateRaw: epreuve.evenement?.date || "", // Conserver la date brute
     discipline: epreuve.discipline?.nom || "Inconnu",
     genre: epreuve.genre || "Inconnu",
     libelle: epreuve?.libelle,
     tour: epreuve.tour || "Inconnu",
     lieu: epreuve.evenement?.lieu?.nom || "Lieu inconnu",
-    heure: formatHeure(epreuve.evenement?.horraire) || "horraire inconnu",
+    heure: formatHeure(epreuve.evenement?.horraire) || "horaire inconnu",
   };
 
 }
-

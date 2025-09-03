@@ -21,7 +21,11 @@ export default function SearchEpreuve({ onFiltersChange, filters, epreuves }: Se
     )
   }else{
     return (
-     <SearchEpreuveDesktop onFiltersChange={onFiltersChange} filters={filters}/>
+     <SearchEpreuveDesktop
+       onFiltersChange={onFiltersChange}
+       filters={filters}
+       epreuves={epreuves} // ← Ajouter les épreuves pour desktop aussi
+     />
     )
   }
 }
