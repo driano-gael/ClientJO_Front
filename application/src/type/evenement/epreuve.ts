@@ -19,3 +19,12 @@ export interface EpreuveCardType {
   lieu: string;
   heure: string;
 }
+
+export interface EpreuveFilters {
+  libelle?: string;
+  disciplineId?: number;
+  date?: string; // Format YYYY-MM-DD
+  tour?: string;
+  sortBy?: 'date' | 'libelle';
+  sortOrder?: 'asc' | 'desc';
+}

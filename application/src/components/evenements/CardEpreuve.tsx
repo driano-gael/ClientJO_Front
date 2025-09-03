@@ -28,6 +28,7 @@ export default function CardEpreuve({epreuve}: Props) {
                                 alt="Boxe"
                                 width={30}
                                 height={30}
+                                style={{ width: 'auto', height: 'auto' }}
                               />
                         </div>
 

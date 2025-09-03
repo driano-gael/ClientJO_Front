@@ -2,15 +2,6 @@ import {fetchApi} from '@/lib/api/core/fetchWrappers';
 import {Epreuve, EpreuveCardType} from '@/type/evenement/epreuve';
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 
-export interface EpreuveFilters {
-  libelle?: string;
-  disciplineId?: number;
-  date?: string; // Format YYYY-MM-DD
-  tour?: string;
-  sortBy?: 'nom' | 'discipline';
-  sortOrder?: 'asc' | 'desc';
-}
-
 export class EpreuveService {
   private static readonly BASE_PATH = '/epreuve';
 
@@ -48,12 +39,11 @@ export class EpreuveService {
 
   static async getAllEvenementsAsCards(filters?: EpreuveFilters): Promise<EpreuveCardType[]> {
     const evenements = await this.getAllEpreuves(filters);
-    console.log(evenements)
     return evenements.map(mapEpreuveToCard);
   }
 }
 
-function mapEpreuveToCard(epreuve: Epreuve): EpreuveCardType {
+export function mapEpreuveToCard(epreuve: Epreuve): EpreuveCardType {
   return {
     date: formatDateFr(epreuve.evenement?.date) || "Date Inconue",
     discipline: epreuve.discipline?.nom || "Inconnu",
