@@ -17,7 +17,7 @@ export default function SearchEpreuveMobile({ onFiltersChange, filters, epreuves
   // États pour la discipline
   const [disciplineSearch, setDisciplineSearch] = useState("");
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const { disciplines, loading, error } = useDisciplines();
+  const { disciplines} = useDisciplines();
   const [filteredDisciplines, setFilteredDisciplines] = useState<Discipline[]>([]);
   const [showDisciplineList, setShowDisciplineList] = useState(false);
 
