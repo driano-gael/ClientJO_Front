@@ -11,7 +11,7 @@ describe('DisciplineService', () => {
   it('getAllDisciplines appelle fetchApi sans filtres', async () => {
     (fetchApi as jest.Mock).mockResolvedValueOnce([{ nom: 'Athlétisme' }]);
     const result = await DisciplineService.getAllDisciplines();
-    expect(fetchApi).toHaveBeenCalledWith('/discipline/');
+    expect(fetchApi).toHaveBeenCalledWith('/discipline/', {}, false);
     expect(result).toEqual([{ nom: 'Athlétisme' }]);
   });
 
@@ -19,12 +19,13 @@ describe('DisciplineService', () => {
     (fetchApi as jest.Mock).mockResolvedValueOnce([{ nom: 'Natation' }]);
     const filters: DisciplineFilters = { nom: 'Natation', page: 2, limit: 10, sortBy: 'nom', sortOrder: 'asc' };
     await DisciplineService.getAllDisciplines(filters);
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('/discipline/?'));
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('search=Natation'));
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('page=2'));
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('limit=10'));
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('sortBy=nom'));
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('sortOrder=asc'));
+
+    // Vérifier que fetchApi a été appelé avec les bons paramètres
+    expect(fetchApi).toHaveBeenCalledWith(
+      '/discipline/?search=Natation&page=2&limit=10&sortBy=nom&sortOrder=asc',
+      {},
+      false
+    );
   });
 
   it('getAllDisciplines gère les erreurs de fetchApi', async () => {
