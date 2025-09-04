@@ -17,7 +17,7 @@ export default function SearchEpreuveMobile({ onFiltersChange, filters, epreuves
   // États pour la discipline
   const [disciplineSearch, setDisciplineSearch] = useState("");
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const { disciplines } = useDisciplines();
+  const { disciplines, loading, error } = useDisciplines();
   const [filteredDisciplines, setFilteredDisciplines] = useState<Discipline[]>([]);
   const [showDisciplineList, setShowDisciplineList] = useState(false);
 
@@ -200,13 +200,14 @@ export default function SearchEpreuveMobile({ onFiltersChange, filters, epreuves
               />
               {showDisciplineList && filteredDisciplines.length > 0 && (
                 <div
-                  className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto"
+                  className="absolute z-[9999] w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg"
                   onMouseDown={(e) => e.preventDefault()} // Empêche le blur de l'input
+                  style={{ top: '100%', left: 0 }} // Position explicite
                 >
                   {filteredDisciplines.map((discipline) => (
                     <div
                       key={discipline.id}
-                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0"
                       onClick={() => handleDisciplineSelect(discipline)}
                     >
                       {discipline.nom}

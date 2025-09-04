@@ -1,5 +1,5 @@
 import {fetchApi} from '@/lib/api/core/fetchWrappers';
-import {Epreuve, EpreuveCardType} from '@/type/evenement/epreuve';
+import {Epreuve, EpreuveCardType, EpreuveFilters} from '@/type/evenement/epreuve';
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 
 export class EpreuveService {
