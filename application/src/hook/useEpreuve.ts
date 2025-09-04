@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from "react";
-import { EpreuveCardType } from "@/type/evenement/epreuve";
-import { EpreuveFilters, EpreuveService } from "@/lib/api/service/epreuveService";
+import {Epreuve, EpreuveCardType, EpreuveFilters} from "@/type/evenement/epreuve";
+import { EpreuveService } from "@/lib/api/service/epreuveService";
 
 
 
@@ -36,7 +36,7 @@ export function useEpreuvesCards(initialFilters?: EpreuveFilters) {
 }
 
 export function useEpreuves(initialFilters?: EpreuveFilters) {
-  const [epreuves, setEpreuves] = useState<EpreuveCardType[]>([]);
+  const [epreuves, setEpreuves] = useState<Epreuve[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 

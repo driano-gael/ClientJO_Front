@@ -6,7 +6,7 @@ import {EpreuveFilters, Epreuve} from "@/type/evenement/epreuve";
 interface SearchEpreuveProps {
   onFiltersChange: (filters: EpreuveFilters) => void;
   filters: EpreuveFilters;
-  epreuves: Epreuve[]; // ← Ajouter les épreuves
+  epreuves: Epreuve[];
 }
 
 export default function SearchEpreuve({ onFiltersChange, filters, epreuves }: SearchEpreuveProps){

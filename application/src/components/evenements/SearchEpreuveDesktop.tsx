@@ -1,26 +1,26 @@
-import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { EpreuveFilters, Epreuve } from "@/type/evenement/epreuve";
-import { Discipline } from "@/type/evenement/discipline";
-import { useDisciplines } from "@/hook/useDisciplines";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {Epreuve, EpreuveFilters} from "@/type/evenement/epreuve";
+import {Discipline} from "@/type/evenement/discipline";
+import {useDisciplines} from "@/hook/useDisciplines";
 
-interface SearchEpreuveDesktopProps {
+interface Props {
   onFiltersChange: (filters: EpreuveFilters) => void;
   filters: EpreuveFilters;
-  epreuves: Epreuve[]; // ← Ajouter les épreuves en props
+  epreuves: Epreuve[];
 }
 
 export default function SearchEpreuveDesktop({
-  onFiltersChange,
-  filters,
-  epreuves,
-}: SearchEpreuveDesktopProps) {
+                                               onFiltersChange,
+                                               filters,
+                                               epreuves,
+                                             }: Props) {
+
   const [localFilters, setLocalFilters] = useState<EpreuveFilters>(filters);
 
   // États pour la discipline
   const [disciplineSearch, setDisciplineSearch] = useState("");
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const { disciplines } = useDisciplines();
+  const {disciplines} = useDisciplines();
   const [filteredDisciplines, setFilteredDisciplines] = useState<Discipline[]>([]);
   const [showDisciplineList, setShowDisciplineList] = useState(false);
 
@@ -119,7 +119,7 @@ export default function SearchEpreuveDesktop({
     setShowDisciplineList(true);
     if (selectedDiscipline && value !== selectedDiscipline.nom) {
       setSelectedDiscipline(null);
-      const newFilters = { ...localFilters };
+      const newFilters = {...localFilters};
       delete newFilters.disciplineId;
       setLocalFilters(newFilters);
       onFiltersChange(newFilters);
@@ -152,7 +152,8 @@ export default function SearchEpreuveDesktop({
   return (
     <>
       <div className="flex justify-center w-full">
-        <div className="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 p-2">
+        <div
+          className="bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 p-2">
           <div className="flex items-center divide-x divide-gray-300">
 
             {/* Discipline */}

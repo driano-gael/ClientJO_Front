@@ -111,7 +111,7 @@ export default function Evenements() {
             <SearchEpreuve
               onFiltersChange={handleFiltersChange}
               filters={filters}
-              epreuves={epreuves} // ← Passer les épreuves en props
+              epreuves={epreuves}
             />
           </div>
 

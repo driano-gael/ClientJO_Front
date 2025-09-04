@@ -5,11 +5,11 @@ import { useEffect, useCallback, useRef } from 'react';
 type Props = {
   message: string;
   type?: 'error' | 'success' | 'info';
-  onClose: () => void;
+  onCloseAction?: () => void;
   duration?: number;
 }
 
-export default function Notification({ message, type = 'error', onClose, duration = 3000 }: Props) {
+export default function Notification({ message, type = 'error', onCloseAction = () => {}, duration = 3000 }: Props) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const mountedRef = useRef(true);
 
@@ -18,9 +18,9 @@ export default function Notification({ message, type = 'error', onClose, duratio
 
   const handleClose = useCallback(() => {
     if (mountedRef.current) {
-      onClose();
+      onCloseAction();
     }
-  }, [onClose]);
+  }, [onCloseAction]);
 
   useEffect(() => {
     // Nettoyer le timer précédent s'il existe
