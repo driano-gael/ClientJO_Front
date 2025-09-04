@@ -1,9 +1,6 @@
-
-
 import { useState, useEffect } from "react";
 import {EpreuveCardType} from "@/type/evenement/epreuve";
 import CardEpreuve from "@/components/evenements/CardEpreuve";
-
 
 interface Props {
   epreuves?: EpreuveCardType[];
@@ -18,7 +15,6 @@ export default function CarousselEpreuve({ epreuves = [] }: Props) {
   useEffect(() => {
     const updateVisible = () => {
       const width = window.innerWidth;
-      // const cols = Math.floor(width / 180); // largeur approximative par carte
       setVisible(Math.ceil(width / 250));
       setCurrent(0);
     };
