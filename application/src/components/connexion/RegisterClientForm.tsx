@@ -213,7 +213,7 @@ export default function RegisterClientForm({onClick}: Props) {
                 <Notification 
                     message={error || successMessage || ''} 
                     type={notificationType} 
-                    onClose={handleCloseNotification} 
+                    onCloseAction={handleCloseNotification}
                 />
             )}
         </>

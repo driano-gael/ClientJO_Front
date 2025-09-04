@@ -120,7 +120,7 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
         <Notification 
           message={error} 
           type="error" 
-          onClose={handleCloseNotification} 
+          onCloseAction={handleCloseNotification}
         />
       )}
     </>
