@@ -11,14 +11,15 @@ export interface Epreuve {
 }
 
 export interface EpreuveCardType {
-  date: string; // Date formatée pour l'affichage (ex: "lundi 15 janvier")
-  dateRaw: string; // Date brute pour les comparaisons (ex: "2024-01-15")
+  date: string;
+  dateRaw: string;
   discipline: string;
   genre: string;
   libelle: string;
   tour: string;
   lieu: string;
   heure: string;
+  icone:string
 }
 
 export interface EpreuveFilters {

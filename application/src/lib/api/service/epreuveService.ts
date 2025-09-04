@@ -53,6 +53,7 @@ export function mapEpreuveToCard(epreuve: Epreuve): EpreuveCardType {
     tour: epreuve.tour || "Inconnu",
     lieu: epreuve.evenement?.lieu?.nom || "Lieu inconnu",
     heure: formatHeure(epreuve.evenement?.horraire) || "horaire inconnu",
+    icone: epreuve.discipline.icone || ""
   };
 
 }
