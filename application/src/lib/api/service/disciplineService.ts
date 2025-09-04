@@ -39,7 +39,7 @@ export class DisciplineService {
       }
     }
 
-    return fetchApi<Discipline[]>(url);
+    return fetchApi<Discipline[]>(url, {}, false);
   }
 
   /**
