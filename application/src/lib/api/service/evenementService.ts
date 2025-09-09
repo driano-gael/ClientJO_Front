@@ -62,5 +62,9 @@ export class EvenementService {
     return fetchApi<Evenement>(`${this.BASE_PATH}/${id}/`);
   }
 
+    static async getEvenementByEpreuveId(id: number): Promise<Evenement> {
+    return fetchApi<Evenement>(`${this.BASE_PATH}/by-epreuve/${id}/`, {}, false);
+  }
+
 }
 

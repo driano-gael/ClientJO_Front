@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
-import {EpreuveCardType} from "@/type/evenement/epreuve";
+"use client";
+
+import {useState, useEffect} from "react";
+import { EpreuveCardType } from "@/type/evenement/epreuve";
 import CardEpreuve from "@/components/evenements/CardEpreuve";
 
 interface Props {
   epreuves?: EpreuveCardType[];
+  onCardClickAction: (epreuveId: number) => void;
 }
 
-export default function CarousselEpreuve({ epreuves = [] }: Props) {
+export default function CarousselEpreuve({ epreuves = [], onCardClickAction }: Props) {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(2);
   const [startX, setStartX] = useState<number | null>(null);
+
 
   // Calcul dynamique du nombre de cartes visibles
   useEffect(() => {
@@ -62,26 +66,26 @@ export default function CarousselEpreuve({ epreuves = [] }: Props) {
   return (
     <div className="relative w-full overflow-visible">
       <div className="overflow-hidden bg-base-300 rounded-tl-[20px] rounded-br-[20px]">
-      <div
-        className="flex transition-transform duration-500"
-        style={{ transform: `translateX(-${current * cardWidth}%)` }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-      >
-        {epreuves.map((epreuve, index) => (
-          <div
-            key={index}
-            style={{
-              flex: `0 0 ${cardWidth}%`,
-              maxWidth: `${cardWidth}%`,
-              boxSizing: "border-box",
-              padding: "0.5rem",
-            }}
-          >
-            <CardEpreuve epreuve={epreuve} />
-          </div>
-        ))}
-      </div>
+        <div
+          className="flex transition-transform duration-500"
+          style={{ transform: `translateX(-${current * cardWidth}%)` }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+        >
+          {epreuves.map((epreuve, index) => (
+            <div
+              key={index}
+              style={{
+                flex: `0 0 ${cardWidth}%`,
+                maxWidth: `${cardWidth}%`,
+                boxSizing: "border-box",
+                padding: "0.5rem",
+              }}
+            >
+              <CardEpreuve epreuve={epreuve} onCardClickAction={onCardClickAction}/>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Boutons navigation */}
@@ -102,7 +106,3 @@ export default function CarousselEpreuve({ epreuves = [] }: Props) {
     </div>
   );
 }
-
-
-
-

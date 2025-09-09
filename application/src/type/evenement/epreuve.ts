@@ -11,6 +11,7 @@ export interface Epreuve {
 }
 
 export interface EpreuveCardType {
+  id: number;
   date: string;
   dateRaw: string;
   discipline: string;

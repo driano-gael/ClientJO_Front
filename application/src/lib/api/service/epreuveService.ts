@@ -45,6 +45,7 @@ export class EpreuveService {
 
 export function mapEpreuveToCard(epreuve: Epreuve): EpreuveCardType {
   return {
+    id: epreuve.id,
     date: formatDateFr(epreuve.evenement?.date) || "Date Inconnue",
     dateRaw: epreuve.evenement?.date || "", // Conserver la date brute
     discipline: epreuve.discipline?.nom || "Inconnu",

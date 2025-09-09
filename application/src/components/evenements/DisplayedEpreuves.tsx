@@ -3,9 +3,10 @@ import {EpreuveCardType} from "@/type/evenement/epreuve";
 
 interface Props {
   epreuves?: EpreuveCardType[];
+  onCardClickAction: (epreuveId: number) => void;
 }
 
-export default function DisplayedEpreuves({ epreuves = [] }: Props) {
+export default function DisplayedEpreuves({ epreuves = [], onCardClickAction }: Props) {
   const grouped = epreuves.reduce((acc: Record<string, EpreuveCardType[]>, epreuve) => {
     if (!acc[epreuve.discipline]) acc[epreuve.discipline] = [];
     acc[epreuve.discipline].push(epreuve);
@@ -18,7 +19,7 @@ export default function DisplayedEpreuves({ epreuves = [] }: Props) {
         <div key={discipline}>
           {/* Label de la discipline */}
           <h2 className="text-[75%] text-black font-bold">{discipline}</h2>
-          <CarousselEpreuve epreuves={disciplineEpreuves}/>
+          <CarousselEpreuve epreuves={disciplineEpreuves} onCardClickAction={onCardClickAction}/>
         </div>
       ))}
     </div>

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import {useMemo, useState} from 'react';
 import Header from "@/components/header/Header";
 import CarousselEpreuve from "@/components/evenements/CarousselEpreuve";
 import SearchEpreuve from "@/components/evenements/searchEpreuve";
@@ -9,18 +9,18 @@ import Spinner from "@/components/common/Spinner";
 import Notification from "@/components/common/Notification";
 import {EpreuveCardType, EpreuveFilters} from "@/type/evenement/epreuve";
 import {mapEpreuveToCard} from "@/lib/api/service/epreuveService";
+import ModalEvenement from "@/components/evenements/ModalEvenement";
 
 
 export default function Evenements() {
   const {epreuves, loading, error} = useEpreuves()
   const [filters, setFilters] = useState<EpreuveFilters>({});
-
   const epreuveCards: EpreuveCardType[] = epreuves.map(mapEpreuveToCard);
+  const [currentEpreuveId, setCurrentEpreuveId] = useState<number>(0)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-  // Fonction de filtrage des épreuves
   const filteredEpreuveCards = useMemo(() => {
     let filtered = [...epreuveCards];
-
     // Filtre par libellé (recherche textuelle)
     if (filters.libelle) {
       filtered = filtered.filter(epreuve =>
@@ -28,7 +28,6 @@ export default function Evenements() {
         epreuve.discipline.toLowerCase().includes(filters.libelle!.toLowerCase())
       );
     }
-
     // Filtre par discipline ID
     if (filters.disciplineId) {
       filtered = filtered.filter(epreuve => {
@@ -40,7 +39,6 @@ export default function Evenements() {
         return epreuveComplete ? epreuveComplete.discipline.id === filters.disciplineId : false;
       });
     }
-
     // Filtre par date minimum (toutes les épreuves à partir de cette date)
     if (filters.date) {
       filtered = filtered.filter(epreuve => {
@@ -56,14 +54,12 @@ export default function Evenements() {
         return epreuveDateOnly >= filterDateOnly;
       });
     }
-
     // Filtre par tour (gardé pour la compatibilité desktop)
     if (filters.tour) {
       filtered = filtered.filter(epreuve =>
         epreuve.tour === filters.tour
       );
     }
-
     // Tri (gardé pour la compatibilité desktop)
     if (filters.sortBy) {
       filtered.sort((a, b) => {
@@ -77,7 +73,6 @@ export default function Evenements() {
         return filters.sortOrder === 'desc' ? -comparison : comparison;
       });
     }
-
     return filtered;
   }, [epreuveCards, filters, epreuves]);
 
@@ -91,9 +86,17 @@ export default function Evenements() {
     setFilters(newFilters);
   };
 
+  const handleClickCard = (id: number) => {
+    setCurrentEpreuveId(id);
+    setIsModalOpen(true)
+    console.log("modal open")
+  }
+  const handleOnCloseModal= ()=>setIsModalOpen(false)
+
   return (
     <>
       <Header/>
+      {isModalOpen && <ModalEvenement epreuveId={currentEpreuveId} onClose={handleOnCloseModal}/>}
       <div className="bg-base-200">
         <div className="w-[90%] mx-auto">
           {loading && (
@@ -119,17 +122,18 @@ export default function Evenements() {
             <p className="font-extrabold text-black">A VENIR</p>
             <hr className="border-1 border-black"/>
             <div className="my-1">
-              <CarousselEpreuve epreuves={epreuvesCarrousel}/>
+              <CarousselEpreuve epreuves={epreuvesCarrousel} onCardClickAction={handleClickCard}/>
             </div>
           </div>
 
           <div>
             <p className="font-extrabold text-black">TOUT LES EVENEMENTS</p>
             <hr className="border-1 border-black"/>
-            <DisplayedEpreuves epreuves={filteredEpreuveCards}/>
+            <DisplayedEpreuves epreuves={filteredEpreuveCards} onCardClickAction={handleClickCard}/>
           </div>
         </div>
       </div>
+
     </>
   );
 }
