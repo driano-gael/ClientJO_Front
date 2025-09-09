@@ -10,6 +10,7 @@ import Notification from "@/components/common/Notification";
 import {EpreuveCardType, EpreuveFilters} from "@/type/evenement/epreuve";
 import {mapEpreuveToCard} from "@/lib/api/service/epreuveService";
 import ModalEvenement from "@/components/evenements/ModalEvenement";
+import {useFilteredEpreuves} from "@/hook/useEpreuveFiltered";
 
 
 export default function Evenements() {
@@ -18,68 +19,13 @@ export default function Evenements() {
   const epreuveCards: EpreuveCardType[] = epreuves.map(mapEpreuveToCard);
   const [currentEpreuveId, setCurrentEpreuveId] = useState<number>(0)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const filteredEpreuveCards = useFilteredEpreuves(epreuveCards, filters, epreuves)
 
-  const filteredEpreuveCards = useMemo(() => {
-    let filtered = [...epreuveCards];
-    // Filtre par libellé (recherche textuelle)
-    if (filters.libelle) {
-      filtered = filtered.filter(epreuve =>
-        epreuve.libelle.toLowerCase().includes(filters.libelle!.toLowerCase()) ||
-        epreuve.discipline.toLowerCase().includes(filters.libelle!.toLowerCase())
-      );
-    }
-    // Filtre par discipline ID
-    if (filters.disciplineId) {
-      filtered = filtered.filter(epreuve => {
-        // Trouver l'épreuve complète correspondante pour accéder à discipline.id
-        const epreuveComplete = epreuves.find(e =>
-          e.libelle === epreuve.libelle &&
-          e.discipline.nom === epreuve.discipline
-        );
-        return epreuveComplete ? epreuveComplete.discipline.id === filters.disciplineId : false;
-      });
-    }
-    // Filtre par date minimum (toutes les épreuves à partir de cette date)
-    if (filters.date) {
-      filtered = filtered.filter(epreuve => {
-        if (!epreuve.dateRaw) return false;
-        // Utiliser dateRaw qui contient la date brute au format ISO
-        const epreuveDate = new Date(epreuve.dateRaw);
-        const filterDate = new Date(filters.date!);
-
-        // Comparer les dates en normalisant à minuit
-        const epreuveDateOnly = new Date(epreuveDate.getFullYear(), epreuveDate.getMonth(), epreuveDate.getDate());
-        const filterDateOnly = new Date(filterDate.getFullYear(), filterDate.getMonth(), filterDate.getDate());
-
-        return epreuveDateOnly >= filterDateOnly;
-      });
-    }
-    // Filtre par tour (gardé pour la compatibilité desktop)
-    if (filters.tour) {
-      filtered = filtered.filter(epreuve =>
-        epreuve.tour === filters.tour
-      );
-    }
-    // Tri (gardé pour la compatibilité desktop)
-    if (filters.sortBy) {
-      filtered.sort((a, b) => {
-        let comparison = 0;
-        if (filters.sortBy === 'date') {
-          // Utiliser dateRaw pour les comparaisons de tri
-          comparison = new Date(a.dateRaw).getTime() - new Date(b.dateRaw).getTime();
-        } else if (filters.sortBy === 'libelle') {
-          comparison = a.libelle.localeCompare(b.libelle);
-        }
-        return filters.sortOrder === 'desc' ? -comparison : comparison;
-      });
-    }
-    return filtered;
-  }, [epreuveCards, filters, epreuves]);
 
   // Tri des 10 prochaines épreuves par date la plus récente
-  const epreuvesCarrousel = [...epreuveCards]
-    .sort((a, b) => new Date(b.dateRaw).getTime() - new Date(a.dateRaw).getTime()) // Utiliser dateRaw ici aussi
-    .slice(0, 10);
+const epreuvesCarrousel = [...epreuveCards]
+  .sort((a, b) => new Date(a.dateRaw).getTime() - new Date(b.dateRaw).getTime()) // a - b pour croissant
+  .slice(0, 10);
 
   // Fonction pour mettre à jour les filtres
   const handleFiltersChange = (newFilters: EpreuveFilters) => {
