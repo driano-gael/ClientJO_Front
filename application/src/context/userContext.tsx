@@ -33,7 +33,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, shouldRedirect?: boolean) => Promise<void>;
   logout: () => void;
   forceLogout: () => void;
   currentRoute: string | null;
@@ -143,7 +143,7 @@ const forceLogout = useCallback(() => {
   }, [tryRestoreUserFromStorage, forceLogout]);
 
   // 🔓 login
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, shouldRedirect: boolean = true) => {
     try {
       await loginService({ email, password });
 
@@ -159,16 +159,15 @@ const forceLogout = useCallback(() => {
 
       setUser(fakeUser);
 
-      if (currentRoute) {
-        setTimeout(() => {
-          const target = currentRoute;
-          setCurrentRoute(null);
-          router.push(target);
-        }, 100);
-      } else {
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 100);
+      if (shouldRedirect) {
+        if (currentRoute) {
+          setTimeout(() => {
+            const target = currentRoute;
+            setCurrentRoute(null);
+            router.push(target);
+          }, 100);
+        }
+        // Suppression de la redirection automatique vers /dashboard
       }
     } catch (error) {
       throw error;

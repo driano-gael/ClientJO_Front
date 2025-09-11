@@ -1,18 +1,13 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { login } from '@/lib/api/auth/authService';
+import { useAuth } from '@/context/userContext';
 import Notification from '../common/Notification';
 import Spinner from '../common/Spinner';
 
 type Props = {
   onClick: () => void;
   onLoginSuccess?: () => void;
-}
-
-type LoginResponse = {
-  access: string;
-  refresh: string;
 }
 
 export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
@@ -22,6 +17,9 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
   const [showNotification, setShowNotification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const submitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Utiliser la fonction login du contexte au lieu du service direct
+  const { login } = useAuth();
 
   const handleCloseNotification = useCallback(() => {
     requestAnimationFrame(() => {
@@ -42,26 +40,22 @@ export default function LoginClientForm({onClick, onLoginSuccess}: Props) {
     }, 1000);
     
     try {
-      const res = await login({ email, password }) as LoginResponse;
-      if (res.access) {
-        localStorage.setItem(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY || 'auth_token', res.access);
-        if (onLoginSuccess) {
-          setTimeout(() => {
-            onLoginSuccess();
-          }, 500);
-        }
-      } else {
-        setError('Token non reçu');
-        setShowNotification(true);
+      // Utiliser la fonction login du contexte qui met à jour isAuthenticated
+      await login(email, password, false);
+
+      if (onLoginSuccess) {
+        setTimeout(() => {
+          onLoginSuccess();
+        }, 500);
       }
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+      const errorMessage = err instanceof Error ? err.message : 'Erreur de connexion';
       setError(errorMessage);
       setShowNotification(true);
     } finally {
       setIsLoading(false);
     }
-  }, [email, password, isLoading, onLoginSuccess]);
+  }, [email, password, login, onLoginSuccess, isLoading]);
 
   return (
     <>
