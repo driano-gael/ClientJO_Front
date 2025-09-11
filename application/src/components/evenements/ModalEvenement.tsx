@@ -1,5 +1,5 @@
 import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
-import {formatDateFr} from "@/utils/formatDate";
+import {formatDateFr, formatHeure} from "@/utils/formatDate";
 import {Epreuve} from "@/type/evenement/epreuve";
 
 type Props = {
@@ -49,25 +49,38 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                   <div
                     className="text-black font-bold text-center mx-[10%] py-[8px] bg-accent rounded-[8px]">{evenement.description}</div>
                   {/*liste des épreuves*/}
-                  <div className="mt-4 mx-[10%] flex flex-wrap gap-4">
+                  <div className="mt-4 mx-[10%] gap-2">
                     {Object.entries(groupedEpreuves).map(([discipline, epreuves]) => (
                       <div key={discipline} className="mb-6">
                         {/* Rupture = titre discipline */}
-                        <h2 className="text-lg font-bold text-black mb-2">{discipline}</h2>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="text-lg font-bold text-black mb-2 rounded-[20px] border border-accent w-[90%]">
+                          <h2 className="pl-4 text-lg font-bold text-black">{discipline}</h2>
+                        </div>
+                        <div className="pl-3">
                           {epreuves.map((epreuve) => (
                             <div
                               key={epreuve.id}
-                              className="bg-white rounded-[20px] border border-accent p-2 shadow text-black w-[220px] flex-shrink-0"
+                              className="bg-white text-black flex gap-2"
+
                             >
-                              <div className="font-semibold">{epreuve.libelle}</div>
-                              <div className="text-xs text-gray-500">{epreuve.tour}</div>
+                              <div className="font-semibold"> {epreuve.tour}</div>
+                              <div className="font-semibold"> {epreuve.genre}</div>
+                              <div className="">{epreuve.libelle}</div>
                             </div>
                           ))}
                         </div>
                       </div>
                     ))}
                   </div>
+                {/* lieu */}
+                  <hr className="border border-black w-[85%] mx-auto"/>
+                  <div className="text-black my-2 font-bold text-center mx-[10%] py-[8px] bg-base-200 rounded-[8px]">
+                    <div>{evenement.lieu.nom}</div>
+                    <div> A partir de : {formatHeure(evenement.horraire)}</div>
+                  </div>
+                  <hr className="border border-black w-[85%] mx-auto"/>
+                {/*  {gestion de l'offre*/}
+
                 </div>
             </>
           )}
