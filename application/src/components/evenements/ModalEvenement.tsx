@@ -1,6 +1,9 @@
 import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 import {Epreuve} from "@/type/evenement/epreuve";
+import { useAuth } from "@/context/userContext";
+import { useState } from "react";
+import ModalAuthentication from "@/components/connexion/modalAuthentication";
 
 type Props = {
   epreuveId: number;
@@ -9,6 +12,8 @@ type Props = {
 
 export default function ModalEvenement({epreuveId, onClose}: Props) {
   const {evenement, loading, error} = useEvenementByEpreuveId(epreuveId);
+  const { isAuthenticated } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const groupedEpreuves = evenement
     ? evenement.epreuves.reduce<Record<string, Epreuve[]>>((acc, epreuve) => {
@@ -80,12 +85,45 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                   </div>
                   <hr className="border border-black w-[85%] mx-auto"/>
                 {/*  {gestion de l'offre*/}
+                <div className="text-black my-4 text-center mx-[10%]">
+                  {isAuthenticated ? (
+                    <div>
+                      <h3 className="font-bold text-lg mb-3">Offres disponibles</h3>
+                      {/* Ici tu peux ajouter la logique pour afficher les offres */}
+                      <div className="space-y-2">
+                        <div className="bg-accent/20 p-3 rounded-lg">
+                          <p className="font-semibold">Offre Premium</p>
+                          <p className="text-sm">Accès VIP aux épreuves</p>
+                        </div>
+                        <div className="bg-accent/20 p-3 rounded-lg">
+                          <p className="font-semibold">Offre Standard</p>
+                          <p className="text-sm">Accès standard aux épreuves</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="font-bold text-lg mb-3">Connectez-vous pour voir les offres</h3>
+                      <button
+                        onClick={() => setShowAuthModal(true)}
+                        className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/80 transition"
+                      >
+                        Se connecter
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 </div>
             </>
           )}
         </div>
       </div>
+
+      {/* Modal d'authentification */}
+      {showAuthModal && (
+        <ModalAuthentication onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 }

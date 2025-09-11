@@ -36,12 +36,11 @@ export async function registerClient(
         telephone: string;
     })
 {
-    return await fetchApi('/auth/register/client', {
+    return await fetchApi('/auth/register/client/', {
         method: 'POST',
         body: JSON.stringify({
         email: data.email,
         password: data.password,
-        role: 'client',
         nom: data.nom,
         prenom: data.prenom,
         telephone: data.telephone,

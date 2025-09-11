@@ -97,30 +97,7 @@ export default function RegisterClientForm({onClick}: Props) {
             <div className='flex flex-col items-center justify-between p-[10%] h-full'>
                 <h2 className="text-3xl font-bold text-black mt-3">INSCRIPTION</h2>
                 <form onSubmit={handleSubmit} className="gap-4 p-4 flex items-center flex-col w-full">
-                    <div className="w-full flex flex-col mb-2">
-                        <input
-                            name="email" 
-                            type="email" 
-                            placeholder="Email" 
-                            value={formData.email} 
-                            onChange={handleChange} 
-                            required 
-                            autoComplete='email'
-                            className="w-full border-0 border-b border-black/20 text-black p-2 placeholder-gray-400"
-                        />
-                    </div>
-                    <div className="w-full flex flex-col mb-2">
-                        <input 
-                            name="password" 
-                            type="password" 
-                            placeholder="Mot de passe" 
-                            value={formData.password} 
-                            onChange={handleChange} 
-                            required 
-                            autoComplete='new-password'
-                            className="w-full border-0 border-b border-black/20 text-black p-2 placeholder-gray-400"
-                        />
-                    </div>
+
                     <div className="w-full flex flex-col mb-2">
                         <input 
                             name="nom" 
@@ -154,6 +131,29 @@ export default function RegisterClientForm({onClick}: Props) {
                             onChange={handleChange} 
                             required 
                             autoComplete='tel'
+                            className="w-full border-0 border-b border-black/20 text-black p-2 placeholder-gray-400"
+                        />
+                    </div><div className="w-full flex flex-col mb-2">
+                        <input
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            autoComplete='email'
+                            className="w-full border-0 border-b border-black/20 text-black p-2 placeholder-gray-400"
+                        />
+                    </div>
+                    <div className="w-full flex flex-col mb-2">
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Mot de passe"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            autoComplete='new-password'
                             className="w-full border-0 border-b border-black/20 text-black p-2 placeholder-gray-400"
                         />
                     </div>
