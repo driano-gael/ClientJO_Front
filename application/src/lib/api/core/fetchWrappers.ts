@@ -17,32 +17,40 @@ export async function fetchApi<T = unknown>(
     options: RequestInit = {},
     requiresAuth = true
 ): Promise<T> {
+    console.log('[fetchApi] Début, endpoint:', endpoint, 'options:', options, 'requiresAuth:', requiresAuth);
     let response = await makeRequest(endpoint, options, requiresAuth);
-  
+    console.log('[fetchApi] Réponse initiale:', response.status);
     if (response.status === 401 && requiresAuth) {
+        console.log('[fetchApi] 401 détecté, tentative de refresh du token');
         const refreshed = await tryRefreshToken();
+        console.log('[fetchApi] Résultat du refresh:', refreshed);
         if (refreshed) {
+            console.log('[fetchApi] Token rafraîchi, nouvelle tentative de requête');
             response = await makeRequest(endpoint, options, requiresAuth);
+            console.log('[fetchApi] Réponse après refresh:', response.status);
         } else {
+            console.log('[fetchApi] Refresh échoué, clearTokens et notifySessionExpired');
             clearTokens();
             notifySessionExpired();
             throw new Error("Session expirée. Veuillez vous reconnecter.");
         }
     }
-
     const contentType = response.headers.get("Content-Type") || "";
     if (!response.ok) {
         const errorData = contentType.includes("application/json")
           ? await response.json().catch(() => ({}))
-          : {};
-
-        const error = new Error(`(${response.status}) ${errorData.detail || response.statusText}`);
-        (error as Error & { data: unknown }).data = errorData;
-        throw error;
+          : await response.text();
+        console.log('[fetchApi] Erreur HTTP:', response.status, errorData);
+        throw new Error(`HTTP error: ${response.status}`);
     }
-    return contentType.includes("application/json")
-        ? await response.json()      // Parser en JSON si le content-type l'indique
-        : ({} as T);                 // Retourner un objet vide sinon
+    if (contentType.includes("application/json")) {
+        const json = await response.json();
+        console.log('[fetchApi] Réponse JSON:', json);
+        return json;
+    }
+    const text = await response.text();
+    console.log('[fetchApi] Réponse texte:', text);
+    return text as T;
 }
 
 

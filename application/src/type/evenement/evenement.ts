@@ -8,6 +8,8 @@ export interface Evenement {
   date: string;
   horraire: string;
   epreuves: Epreuve[];
+  nb_place_total: number;
+  nb_place_restante: number
 }
 
 

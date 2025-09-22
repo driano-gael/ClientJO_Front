@@ -2,8 +2,9 @@ import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 import {Epreuve} from "@/type/evenement/epreuve";
 import { useAuth } from "@/context/userContext";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import ModalAuthentication from "@/components/connexion/modalAuthentication";
+import CardOffre from "@/components/evenements/CardOffre";
 
 type Props = {
   epreuveId: number;
@@ -14,7 +15,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
   const {evenement, loading, error} = useEvenementByEpreuveId(epreuveId);
   const { isAuthenticated } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-
+  const [remainingTickets, setRemainingTickets] = useState<number>(0);
   const groupedEpreuves = evenement
     ? evenement.epreuves.reduce<Record<string, Epreuve[]>>((acc, epreuve) => {
         const discipline = epreuve.discipline.nom;
@@ -22,6 +23,14 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
         return acc;
       }, {})
     : {};
+
+  useEffect(() => {
+  if (evenement) {
+    setRemainingTickets(evenement.nb_place_restante);
+  }
+}, [evenement]);
+
+  console.log("ModalEvenement rendu, isAuthenticated:", isAuthenticated);
 
   return (
     <div className="fixed w-screen h-screen flex justify-center bg-black/70 pt-[20px] z-50">
@@ -82,24 +91,14 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                   <div className="text-black my-2 font-bold text-center mx-[10%] py-[8px] bg-base-200 rounded-[8px]">
                     <div>{evenement.lieu.nom}</div>
                     <div> A partir de : {formatHeure(evenement.horraire)}</div>
+                    <div> PLACES RESTANTE : {remainingTickets}</div>
                   </div>
                   <hr className="border border-black w-[85%] mx-auto"/>
                 {/*  {gestion de l'offre*/}
                 <div className="text-black my-4 text-center mx-[10%]">
                   {isAuthenticated ? (
                     <div>
-                      <h3 className="font-bold text-lg mb-3">Offres disponibles</h3>
-                      {/* Ici tu peux ajouter la logique pour afficher les offres */}
-                      <div className="space-y-2">
-                        <div className="bg-accent/20 p-3 rounded-lg">
-                          <p className="font-semibold">Offre Premium</p>
-                          <p className="text-sm">Accès VIP aux épreuves</p>
-                        </div>
-                        <div className="bg-accent/20 p-3 rounded-lg">
-                          <p className="font-semibold">Offre Standard</p>
-                          <p className="text-sm">Accès standard aux épreuves</p>
-                        </div>
-                      </div>
+                      <CardOffre/>
                     </div>
                   ) : (
                     <div>
@@ -122,7 +121,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
 
       {/* Modal d'authentification */}
       {showAuthModal && (
-        <ModalAuthentication onClose={() => setShowAuthModal(false)} />
+        <ModalAuthentication onCloseAction={() => setShowAuthModal(false)} />
       )}
     </div>
   );

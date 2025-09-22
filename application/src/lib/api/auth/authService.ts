@@ -49,11 +49,12 @@ export async function registerClient(
 }
 
 export async function refreshToken() {
+  console.log("[AuthService] refreshToken called");
   const refreshKey = process.env.NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY!;
   const refresh = localStorage.getItem(refreshKey);
   if (!refresh) throw new Error("Refresh token manquant");
 
-  const data = await fetchApi('/auth/token/refresh/', {
+  const data = await fetchApi('/auth/refresh/', {
     method: 'POST',
     body: JSON.stringify({ refresh }),
   }) as { access: string; refresh: string };

@@ -149,7 +149,7 @@ const forceLogout = useCallback(() => {
 
       const fakeUser: User = {
         email,
-        nom: 'NomDeTest', // ⚠️ Tu devras extraire ça de l’API si possible
+        nom: 'NomDeTest',
         id: '123456789',
       };
 
@@ -167,7 +167,6 @@ const forceLogout = useCallback(() => {
             router.push(target);
           }, 100);
         }
-        // Suppression de la redirection automatique vers /dashboard
       }
     } catch (error) {
       throw error;
