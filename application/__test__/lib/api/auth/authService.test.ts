@@ -76,7 +76,7 @@ describe('Auth functions', () => {
           prenom: clientData.prenom,
           telephone: clientData.telephone,
         }),
-      });
+      }, false);
 
       expect(result).toEqual(fakeResponse);
     });
