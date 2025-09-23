@@ -1,5 +1,4 @@
 'use client';
-import {useMemo, useState} from 'react';
 import Header from "@/components/header/Header";
 import CarousselEpreuve from "@/components/evenements/CarousselEpreuve";
 import SearchEpreuve from "@/components/evenements/searchEpreuve";

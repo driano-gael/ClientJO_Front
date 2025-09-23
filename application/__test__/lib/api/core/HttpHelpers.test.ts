@@ -114,15 +114,19 @@ describe('authHelpers', () => {
     });
 
     it('retourne une erreur si fetch retourne ok=false', async () => {
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        headers: {
-          get: () => 'application/json',
-        },
-        json: () => Promise.resolve({ error: 'fail' }),
-      });
-      await expect(makeRequest('/endpoint', { method: 'GET' }, false)).rejects.toThrow();
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+          headers: {
+            get: (key: string) => (key === 'Content-Type' ? 'application/json' : null),
+          },
+          json: () => Promise.resolve({ error: 'fail' }),
+        } as Response)
+      ) as jest.Mock;
+      const response = await makeRequest('/endpoint', { method: 'GET' }, false);
+      expect(response.ok).toBe(false);
+      expect(response.status).toBe(500);
     });
   });
 

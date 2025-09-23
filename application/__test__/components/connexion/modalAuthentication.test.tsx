@@ -27,35 +27,43 @@ describe('ModalAuthentication component', () => {
 
   beforeEach(() => {
     mockClose.mockClear();
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-root');
+    document.body.appendChild(modalRoot);
+  });
+
+  afterEach(() => {
+    const modalRoot = document.getElementById('modal-root');
+    if (modalRoot) document.body.removeChild(modalRoot);
   });
 
   it('affiche le LoginClientForm par défaut', () => {
-    render(<ModalAuthentication onClose={mockClose} />);
+    render(<ModalAuthentication onCloseAction={mockClose} />);
     expect(screen.getByText('Login Form')).toBeInTheDocument();
   });
 
   it('bascule vers le RegisterClientForm quand on clique sur "Switch to Register"', () => {
-    render(<ModalAuthentication onClose={mockClose} />);
+    render(<ModalAuthentication onCloseAction={mockClose} />);
     fireEvent.click(screen.getByText('Switch to Register'));
     expect(screen.getByText('Register Form')).toBeInTheDocument();
   });
 
   it('bascule à nouveau vers le LoginClientForm quand on clique sur "Switch to Login"', () => {
-    render(<ModalAuthentication onClose={mockClose} />);
+    render(<ModalAuthentication onCloseAction={mockClose} />);
     fireEvent.click(screen.getByText('Switch to Register'));
     fireEvent.click(screen.getByText('Switch to Login'));
     expect(screen.getByText('Login Form')).toBeInTheDocument();
   });
 
   it('ferme le modal en cliquant sur le bouton "X"', () => {
-    render(<ModalAuthentication onClose={mockClose} />);
+    render(<ModalAuthentication onCloseAction={mockClose} />);
     const closeButton = screen.getByLabelText('Fermer');
     fireEvent.click(closeButton);
     expect(mockClose).toHaveBeenCalledTimes(1);
   });
 
   it('ferme le modal quand le login réussit', () => {
-    render(<ModalAuthentication onClose={mockClose} />);
+    render(<ModalAuthentication onCloseAction={mockClose} />);
     fireEvent.click(screen.getByText('Login Success'));
     expect(mockClose).toHaveBeenCalledTimes(1);
   });

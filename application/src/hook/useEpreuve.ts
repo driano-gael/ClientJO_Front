@@ -88,7 +88,7 @@ export function useEvenementByEpreuveId(id: number) {
     if (id) {
       fetchEvenement();
     }
-  }, []);
+  }, [fetchEvenement, id]);
 
   return { evenement, loading, error, refetch: fetchEvenement };
 }

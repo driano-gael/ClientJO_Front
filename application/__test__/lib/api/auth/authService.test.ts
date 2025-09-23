@@ -67,12 +67,11 @@ describe('Auth functions', () => {
       };
       const result = await registerClient(clientData);
 
-      expect(fetchApi).toHaveBeenCalledWith('/auth/register/client', {
+      expect(fetchApi).toHaveBeenCalledWith('/auth/register/client/', {
         method: 'POST',
         body: JSON.stringify({
           email: clientData.email,
           password: clientData.password,
-          role: 'client',
           nom: clientData.nom,
           prenom: clientData.prenom,
           telephone: clientData.telephone,
@@ -84,19 +83,16 @@ describe('Auth functions', () => {
   });
 
   describe('refreshToken', () => {
-    it('doit appeler fetchApi avec refresh token et mettre à jour le token d’accès', async () => {
+    it('doit appeler fetchApi avec refresh token et mettre à jour le token d\'accès', async () => {
       localStorage.setItem('auth_refresh_token', 'refresh-token');
-      const fakeResponse = { access: 'new-access-token', refresh: 'new-refresh-token' };
+      const fakeResponse = { access: 'new-access-token' };
       (fetchApi as jest.Mock).mockResolvedValueOnce(fakeResponse);
-
       const result = await refreshToken();
-
-      expect(fetchApi).toHaveBeenCalledWith('/auth/token/refresh/', {
+      expect(fetchApi).toHaveBeenCalledWith('/auth/refresh/', {
         method: 'POST',
         body: JSON.stringify({ refresh: 'refresh-token' }),
       });
-
-      expect(localStorage.getItem('auth_token')).toBe(fakeResponse.access);
+      expect(localStorage.getItem('auth_token')).toBe('new-access-token');
       expect(result).toEqual(fakeResponse);
     });
 

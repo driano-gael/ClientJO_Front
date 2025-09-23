@@ -2,9 +2,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import LoginClientForm from '@/components/connexion/LoginClientForm';
 import { login as mockLogin } from '@/lib/api/auth/authService';
+import { AuthProvider } from '@/context/userContext';
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn(), prefetch: jest.fn() }),
+}));
 
 jest.mock('@/lib/api/auth/authService', () => ({
   login: jest.fn(),
+  logout: jest.fn(),
 }));
 
 describe('LoginClientForm', () => {
@@ -21,7 +26,11 @@ describe('LoginClientForm', () => {
       refresh: 'fake-refresh-token',
     });
 
-    render(<LoginClientForm onClick={onClickMock} onLoginSuccess={onLoginSuccessMock} />);
+    render(
+      <AuthProvider>
+        <LoginClientForm onClick={onClickMock} onLoginSuccess={onLoginSuccessMock} />
+      </AuthProvider>
+    );
 
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@example.com' },
@@ -48,7 +57,11 @@ describe('LoginClientForm', () => {
   it('affiche une erreur si le login échoue', async () => {
     (mockLogin as jest.Mock).mockRejectedValue(new Error('Identifiants invalides'));
 
-    render(<LoginClientForm onClick={onClickMock} />);
+    render(
+      <AuthProvider>
+        <LoginClientForm onClick={onClickMock} />
+      </AuthProvider>
+    );
 
     fireEvent.change(screen.getByPlaceholderText('Email'), {
       target: { value: 'test@example.com' },
@@ -64,7 +77,11 @@ describe('LoginClientForm', () => {
   });
 
   it("n'appelle pas login si les champs sont vides", async () => {
-    render(<LoginClientForm onClick={onClickMock} />);
+    render(
+      <AuthProvider>
+        <LoginClientForm onClick={onClickMock} />
+      </AuthProvider>
+    );
 
     fireEvent.click(screen.getByRole('button', { name: /se connecter/i }));
 
