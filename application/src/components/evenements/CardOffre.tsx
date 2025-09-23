@@ -1,32 +1,43 @@
-import { useOffres } from "@/hook/useOffre";
-import { useEffect } from "react";
+import {Offre} from "@/type/achat/offre";
+import Image from 'next/image';
+import {useState} from "react";
 
-export default function CardOffre() {
-  const { offres, loading, error } = useOffres();
 
-  useEffect(() => {
-    console.log("CardOffre monté");
-    console.log("CardOffre: useOffres retour", { offres, loading, error });
-  }, [offres, loading, error]);
+type Props = {
+  offre: Offre
+  quantity: number
+}
 
+export default function CardOffre({offre, quantity}: Props) {
+  const[remainingPlace, setRemainingPlace] = useState(quantity);
   return (
     <>
-      {loading && <p>Chargement des offres...</p>}
-      {error && <p>Erreur lors du chargement des offres : {error.message}</p>}
-      {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {offres.map((offre) => (
-            <div
-              key={offre.id}
-              className="border p-4 rounded-lg shadow hover:shadow-lg transition"
-            >
-              <h3 className="text-xl font-bold mb-2">{offre.libelle}</h3>
-              <p className="mb-2">{offre.description}</p>
-              <p className="text-lg font-semibold">Prix : {offre.montant} €</p>
-            </div>
-          ))}
+      <div className="flex flex-col items-center border border-accent rounded-[10px]">
+        <h3 className="text-xl font-bold mb-2">{offre.libelle}</h3>
+        <p className="mb-2">{offre.description}</p>
+        <p className="text-lg font-semibold">Prix : {offre.montant} €</p>
+        <div className="flex items-center bg-base-200 gap-3 p-1 mb-1 rounded-2xl">
+          <button>
+            <Image
+              src="/images/minus.png"
+              alt="moins"
+              width={20}
+              height={20}
+            />
+          </button>
+          <span className="text-lg font-medium text-gray-800 min-w-[30px] text-center">
+              0
+          </span>
+          <button>
+            <Image
+              src="/images/add.png"
+              alt="plus"
+              width={20}
+              height={20}
+            />
+          </button>
         </div>
-      )}
+      </div>
     </>
   );
 }

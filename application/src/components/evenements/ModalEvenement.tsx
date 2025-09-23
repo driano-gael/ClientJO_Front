@@ -5,6 +5,7 @@ import { useAuth } from "@/context/userContext";
 import {useEffect, useState} from "react";
 import ModalAuthentication from "@/components/connexion/modalAuthentication";
 import CardOffre from "@/components/evenements/CardOffre";
+import DisplayedOffre from "@/components/evenements/DisplayedOffre";
 
 type Props = {
   epreuveId: number;
@@ -98,7 +99,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                 <div className="text-black my-4 text-center mx-[10%]">
                   {isAuthenticated ? (
                     <div>
-                      <CardOffre/>
+                      <DisplayedOffre/>
                     </div>
                   ) : (
                     <div>
