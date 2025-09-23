@@ -10,6 +10,7 @@ import {EpreuveCardType, EpreuveFilters} from "@/type/evenement/epreuve";
 import {mapEpreuveToCard} from "@/lib/api/service/epreuveService";
 import ModalEvenement from "@/components/evenements/ModalEvenement";
 import {useFilteredEpreuves} from "@/hook/useEpreuveFiltered";
+import {useState} from "react";
 
 
 export default function Evenements() {
