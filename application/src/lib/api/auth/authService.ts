@@ -45,7 +45,7 @@ export async function registerClient(
         prenom: data.prenom,
         telephone: data.telephone,
         }),
-    });
+    }, false)
 }
 
 export async function refreshToken() {
