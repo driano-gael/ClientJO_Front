@@ -38,3 +38,4 @@ export function useOffres() {
   console.log("Rendu du hook useOffres", { offres, loading, error });
   return { offres, loading, error };
 }
+
