@@ -2,7 +2,7 @@ import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 import {Epreuve} from "@/type/evenement/epreuve";
 import {useAuth} from "@/context/userContext";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ModalAuthentication from "@/components/connexion/modalAuthentication";
 import DisplayedOffre from "@/components/evenements/DisplayedOffre";
 import {useReservation} from "@/hook/useReservationOffer";
@@ -21,6 +21,9 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
   const {isAuthenticated} = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  useEffect(() => {
+      console.log("reservedOffer: " ,reservedOffers);
+  }, [reservedOffers]);
   // Grouper les épreuves par discipline
   const groupedEpreuves = evenement
     ? evenement.epreuves.reduce<Record<string, Epreuve[]>>((acc, epreuve) => {
@@ -109,7 +112,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                   {isAuthenticated ? (
                     <div>
                       <DisplayedOffre
-                        offres={offres}
+                        evenementId={evenement.id}
                         remainingTickets={remainingTickets}
                         onReservePlaces={reservePlaces}
                         onUnReservePlaces={unReservePlaces}

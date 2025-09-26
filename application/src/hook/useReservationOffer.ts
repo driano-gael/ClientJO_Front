@@ -1,40 +1,39 @@
 import { useState } from "react";
+import {OffrePanier} from "@/type/achat/offrePanier";
 
-export type ReservedOffer = {
-  offreId: number;
-  quantity: number;
-};
 
 export function useReservation() {
-  const [reservedOffers, setReservedOffers] = useState<ReservedOffer[]>([]);
+    const [reservedOffers, setReservedOffers] = useState<OffrePanier[]>([]);
 
-  const reservePlaces = (offreId: number) => {
-    setReservedOffers(prev => {
-      const existing = prev.find(o => o.offreId === offreId);
-      if (existing) {
-        return prev.map(o =>
-          o.offreId === offreId ? { ...o, quantity: o.quantity + 1 } : o
-        );
-      } else {
-        return [...prev, { offreId, quantity: 1 }];
-      }
-    });
-  };
+    const updateQuantity = (evenementId: number, offreId: number, delta: number) => {
+        setReservedOffers(prev => {
+            const existing = prev.find(
+                o => o.offreId === offreId && o.evenementId === evenementId
+            );
+            if (!existing && delta > 0) {
+                return [...prev, { evenementId, offreId, quantity: delta }];
+            }
+            if (!existing) return prev;
 
-  const unReservePlaces = (offreId: number) => {
-    setReservedOffers(prev => {
-      const existing = prev.find(o => o.offreId === offreId);
-      if (!existing) return prev;
+            const newQuantity = existing.quantity + delta;
+            if (newQuantity <= 0) {
+                return prev.filter(
+                    o => !(o.offreId === offreId && o.evenementId === evenementId)
+                );
+            }
+            return prev.map(o =>
+                o.offreId === offreId && o.evenementId === evenementId
+                    ? { ...o, quantity: newQuantity }
+                    : o
+            );
+        });
+    };
 
-      if (existing.quantity <= 1) {
-        return prev.filter(o => o.offreId !== offreId);
-      } else {
-        return prev.map(o =>
-          o.offreId === offreId ? { ...o, quantity: o.quantity - 1 } : o
-        );
-      }
-    });
-  };
+    const reservePlaces = (evenementId: number, offreId: number) =>
+        updateQuantity(evenementId, offreId, +1);
 
-  return { reservedOffers, reservePlaces, unReservePlaces};
+    const unReservePlaces = (evenementId: number, offreId: number) =>
+        updateQuantity(evenementId, offreId, -1);
+
+    return { reservedOffers, reservePlaces, unReservePlaces };
 }
