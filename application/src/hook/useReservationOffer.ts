@@ -1,39 +1,18 @@
-import { useState } from "react";
-import {OffrePanier} from "@/type/achat/offrePanier";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {addOneArticleToCart, removeOneArticleFromCart} from "@/lib/reducer/panier/panierSlice";
 
 
-export function useReservation() {
-    const [reservedOffers, setReservedOffers] = useState<OffrePanier[]>([]);
+export function useReservationRedux() {
+  const dispatch = useAppDispatch();
+  const reservedOffers = useAppSelector(state => state.panier.items);
 
-    const updateQuantity = (evenementId: number, offreId: number, delta: number) => {
-        setReservedOffers(prev => {
-            const existing = prev.find(
-                o => o.offreId === offreId && o.evenementId === evenementId
-            );
-            if (!existing && delta > 0) {
-                return [...prev, { evenementId, offreId, quantity: delta }];
-            }
-            if (!existing) return prev;
+  const reservePlaces = (evenementId: number, offreId: number) => {
+    dispatch(addOneArticleToCart({ evenementId: evenementId, offreId: offreId }));
+  };
 
-            const newQuantity = existing.quantity + delta;
-            if (newQuantity <= 0) {
-                return prev.filter(
-                    o => !(o.offreId === offreId && o.evenementId === evenementId)
-                );
-            }
-            return prev.map(o =>
-                o.offreId === offreId && o.evenementId === evenementId
-                    ? { ...o, quantity: newQuantity }
-                    : o
-            );
-        });
-    };
+  const unReservePlaces = (evenementId: number, offreId: number) => {
+    dispatch(removeOneArticleFromCart({ evenementId: evenementId, offreId: offreId }));
+  };
 
-    const reservePlaces = (evenementId: number, offreId: number) =>
-        updateQuantity(evenementId, offreId, +1);
-
-    const unReservePlaces = (evenementId: number, offreId: number) =>
-        updateQuantity(evenementId, offreId, -1);
-
-    return { reservedOffers, reservePlaces, unReservePlaces };
+  return { reservedOffers, reservePlaces, unReservePlaces };
 }

@@ -24,6 +24,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
   useEffect(() => {
       console.log("reservedOffer: " ,reservedOffers);
   }, [reservedOffers]);
+
   // Grouper les épreuves par discipline
   const groupedEpreuves = evenement
     ? evenement.epreuves.reduce<Record<string, Epreuve[]>>((acc, epreuve) => {
@@ -39,10 +40,6 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
     return acc + (offre ? offre.nb_personne * ro.quantity : 0);
   }, 0);
   const remainingTickets = evenement ? evenement.nb_place_restante - totalReservedPlaces : 0;
-
-  const handleAddToCart = () => {
-    console.log("Offres réservées :", reservedOffers);
-  };
 
 
   return (
@@ -117,12 +114,6 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
                         onReservePlaces={reservePlaces}
                         onUnReservePlaces={unReservePlaces}
                       />
-                      <button
-                        onClick={handleAddToCart}
-                        className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-accent/80 transition mt-4"
-                      >
-                        Mettre les offres au panier
-                      </button>
                     </div>
 
 
