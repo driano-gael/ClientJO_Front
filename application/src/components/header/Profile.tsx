@@ -4,13 +4,20 @@ import { useState } from 'react';
 import Image from 'next/image';
 import ModalAuthentication from '../connexion/modalAuthentication';
 import {useAuth} from "@/context/userContext";
+import { useSelector } from 'react-redux';
+import { OffrePanier } from '@/type/achat/offrePanier';
+import Link from "next/link";
 
 export default function Profile() {
   const [showModal, setShowModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const { isAuthenticated, logout } = useAuth();
 
-  const cartItemsCount = 3;
+  // Récupérer le panier depuis Redux
+  const panierItems = useSelector((state: { panier: { items: OffrePanier[] } }) => state.panier.items);
+  // Calculer le nombre total d'offres dans le panier
+  const cartItemsCount = panierItems.reduce((acc, item) => acc + item.quantity, 0);
+
   const handleProfileClick = () => {
     if (!isAuthenticated) {
       setShowModal(true);
@@ -44,8 +51,11 @@ export default function Profile() {
         <div className="absolute right-0 top-14 w-48 rounded-xl border bg-white shadow-lg z-[1500]">
           <ul className="flex flex-col text-sm">
             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">
+            <Link href="/panier">
               🛒 Panier
+            </Link>
             </li>
+
             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">
               📦 Mes billets
             </li>

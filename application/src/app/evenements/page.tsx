@@ -42,7 +42,7 @@ const epreuvesCarrousel = [...epreuveCards]
   return (
     <>
       <Header/>
-      {isModalOpen && <ModalEvenement epreuveId={currentEpreuveId} onClose={handleOnCloseModal}/>}
+      {isModalOpen && <ModalEvenement epreuveId={currentEpreuveId} onCloseAction={handleOnCloseModal}/>}
       <div className="bg-base-200">
         <div className="w-[90%] mx-auto">
           {loading && (

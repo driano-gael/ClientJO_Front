@@ -7,7 +7,3 @@ export type OffrePanier = {
 export interface PanierState {
   items: OffrePanier[];
 }
-
-const initialState: PanierState = {
-  items: [],
-};

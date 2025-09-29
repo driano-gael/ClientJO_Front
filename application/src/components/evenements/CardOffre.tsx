@@ -1,6 +1,5 @@
 import {Offre} from "@/type/achat/offre";
 import Image from 'next/image';
-import {useState} from "react";
 
 
 type Props = {
@@ -8,20 +7,18 @@ type Props = {
   remainingTickets: number;
   onReservePlaces: () => void;
   onUnReservePlaces: () => void;
+  quantityInCart: number; // nouvelle prop
 };
 
-export default function CardOffre({offre, remainingTickets, onReservePlaces, onUnReservePlaces}: Props) {
-  const[reservedOffer, setReservedOffer] = useState(0);
+export default function CardOffre({offre, remainingTickets, onReservePlaces, onUnReservePlaces, quantityInCart}: Props) {
 
   const handleAddOffer= () => {
     if(remainingTickets >= offre.nb_personne){
-      setReservedOffer(reservedOffer + 1);
       onReservePlaces();
     }
   }
   const handleRemoveOffer= () => {
-    if(reservedOffer > 0){
-      setReservedOffer(reservedOffer - 1);
+    if(quantityInCart > 0){
       onUnReservePlaces();
     }
   }
@@ -43,7 +40,7 @@ export default function CardOffre({offre, remainingTickets, onReservePlaces, onU
             />
           </button>
           <span className="text-lg font-medium text-gray-800 min-w-[30px] text-center">
-            {reservedOffer}
+            {quantityInCart}
           </span>
           <button
           onClick={handleAddOffer}

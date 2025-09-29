@@ -12,11 +12,11 @@ import {useReservationOffer} from "@/hook/useReservationOffer";
 
 type Props = {
   epreuveId: number;
-  onClose: () => void;
+  onCloseAction: () => void;
 };
 
 
-export default function ModalEvenement({epreuveId, onClose}: Props) {
+export default function ModalEvenement({epreuveId, onCloseAction}: Props) {
   const {offres} = useOffres();
   const {evenement, loading, error} = useEvenementByEpreuveId(epreuveId);
   const {reservedOffers, reservePlaces, unReservePlaces} = useReservationOffer();
@@ -36,8 +36,10 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
     }, {})
     : {};
 
+  // Filtrer les réservations pour ne garder que celles de l'événement courant
+  const reservedOffersForEvent = reservedOffers.filter(ro => ro.evenementId === evenement?.id);
   // Calcul dynamique des places restantes
-  const totalReservedPlaces = reservedOffers.reduce((acc, ro) => {
+  const totalReservedPlaces = reservedOffersForEvent.reduce((acc, ro) => {
     const offre = offres.find(o => o.id === ro.offreId);
     return acc + (offre ? offre.nb_personne * ro.quantity : 0);
   }, 0);
@@ -59,7 +61,7 @@ export default function ModalEvenement({epreuveId, onClose}: Props) {
             <>
               {/* Bouton fermer */}
               <button
-                onClick={onClose}
+                onClick={onCloseAction}
                 className="absolute top-3 right-3 text-white bg-black rounded-full p-2 hover:bg-black/70 transition"
               >
                 ✕
