@@ -1,10 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {OffrePanier} from "@/type/achat/offrePanier";
+import {PanierState} from "@/type/achat/offrePanier";
 
 
-interface PanierState {
-  items: OffrePanier[];
-}
 
 const initialState: PanierState = {
   items: [],

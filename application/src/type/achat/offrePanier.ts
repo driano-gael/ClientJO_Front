@@ -3,3 +3,11 @@ export type OffrePanier = {
   offreId: number;
   quantity: number;
 };
+
+export interface PanierState {
+  items: OffrePanier[];
+}
+
+const initialState: PanierState = {
+  items: [],
+};
