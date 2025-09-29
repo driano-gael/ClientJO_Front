@@ -1,3 +1,5 @@
+'use client';
+
 import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 import {Epreuve} from "@/type/evenement/epreuve";
@@ -5,8 +7,8 @@ import {useAuth} from "@/context/userContext";
 import {useEffect, useState} from "react";
 import ModalAuthentication from "@/components/connexion/modalAuthentication";
 import DisplayedOffre from "@/components/evenements/DisplayedOffre";
-import {useReservation} from "@/hook/useReservationOffer";
 import {useOffres} from "@/hook/useOffre";
+import {useReservationOffer} from "@/hook/useReservationOffer";
 
 type Props = {
   epreuveId: number;
@@ -17,7 +19,7 @@ type Props = {
 export default function ModalEvenement({epreuveId, onClose}: Props) {
   const {offres} = useOffres();
   const {evenement, loading, error} = useEvenementByEpreuveId(epreuveId);
-  const {reservedOffers, reservePlaces, unReservePlaces} = useReservation();
+  const {reservedOffers, reservePlaces, unReservePlaces} = useReservationOffer();
   const {isAuthenticated} = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
 

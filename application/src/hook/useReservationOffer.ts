@@ -2,7 +2,7 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {addOneArticleToCart, removeOneArticleFromCart} from "@/lib/reducer/panier/panierSlice";
 
 
-export function useReservationRedux() {
+export function useReservationOffer() {
   const dispatch = useAppDispatch();
   const reservedOffers = useAppSelector(state => state.panier.items);
 
