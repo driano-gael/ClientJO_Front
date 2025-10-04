@@ -24,7 +24,13 @@ export async function login(
 }
 
 export function logout() {
-    localStorage.removeItem(process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY!);
+    const tokenKey = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY;
+    const refreshKey = process.env.NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY;
+
+    if (typeof window !== 'undefined') {
+        if (tokenKey) localStorage.removeItem(tokenKey);
+        if (refreshKey) localStorage.removeItem(refreshKey);
+    }
 }
 
 export async function registerClient(
