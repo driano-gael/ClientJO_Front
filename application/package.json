@@ -8,7 +8,8 @@
     "start": "next start -p 3000",
     "lint": "next lint",
     "test": "jest --watchAll=false --verbose",
-    "test:watch": "jest --verbose"
+    "test:watch": "jest --verbose",
+    "check": "npm run lint && tsc --noEmit && npm run test"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",

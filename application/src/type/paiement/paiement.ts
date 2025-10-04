@@ -23,6 +23,10 @@ export interface MockPaymentRequest {
   items: OffrePanier[]
 }
 
+export interface MockPaymentResponse {
+  gateway_response: GatewayReponse;
+}
+
 export interface GatewayReponse {
   id?: string;
   status: PaymentStatus;

@@ -20,14 +20,14 @@ describe('EpreuveService', () => {
 
   it('getAllEpreuves appelle fetchApi avec filtres', async () => {
     (fetchApi as jest.Mock).mockResolvedValueOnce([{ libelle: 'Natation' }]);
-    const filters: EpreuveFilters = { libelle: 'Natation', disciplineId: 1, date: '2025-09-02', tour: 'final', sortBy: 'nom', sortOrder: 'asc' };
+    const filters: EpreuveFilters = { libelle: 'Natation', disciplineId: 1, date: '2025-09-02', tour: 'final', sortBy: 'libelle', sortOrder: 'asc' };
     await EpreuveService.getAllEpreuves(filters);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('/epreuve/?'), {}, false);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('search=Natation'), {}, false);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('disciplineId=1'), {}, false);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('date=2025-09-02'), {}, false);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('tour=final'), {}, false);
-    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('sortBy=nom'), {}, false);
+    expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('sortBy=libelle'), {}, false);
     expect(fetchApi).toHaveBeenCalledWith(expect.stringContaining('sortOrder=asc'), {}, false);
   });
 
@@ -73,4 +73,3 @@ describe('EpreuveService', () => {
     });
   });
 });
-

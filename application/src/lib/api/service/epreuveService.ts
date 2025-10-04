@@ -2,6 +2,8 @@ import {fetchApi} from '@/lib/api/core/fetchWrappers';
 import {Epreuve, EpreuveCardType, EpreuveFilters} from '@/type/evenement/epreuve';
 import {formatDateFr, formatHeure} from "@/utils/formatDate";
 
+export type { EpreuveFilters } from '@/type/evenement/epreuve';
+
 export class EpreuveService {
   private static readonly BASE_PATH = '/epreuve';
 
