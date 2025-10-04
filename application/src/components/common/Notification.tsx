@@ -1,49 +1,35 @@
 'use client';
 
 import { useEffect, useCallback, useRef } from 'react';
+import Spinner from "@/components/common/Spinner";
+import {NotificationProps} from "@/type/common/notification";
 
-type Props = {
-  message: string;
-  type?: 'error' | 'success' | 'info';
-  onCloseAction?: () => void;
-  duration?: number;
-}
 
-export default function Notification({ message, type = 'error', onCloseAction = () => {}, duration = 3000 }: Props) {
+export default function Notification({ message, type = 'error', onCloseAction = () => {}, duration = 3000 }: NotificationProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const mountedRef = useRef(true);
-
-  // Ajuster la durée selon le type
-  const adjustedDuration = type === 'success' ? Math.max(duration, 2500) : duration;
 
   const handleClose = useCallback(() => {
-    if (mountedRef.current) {
-      onCloseAction();
-    }
+    onCloseAction();
   }, [onCloseAction]);
 
   useEffect(() => {
-    // Nettoyer le timer précédent s'il existe
+    // Nettoyer le timer précédent
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
     // Créer un nouveau timer
-    timerRef.current = setTimeout(handleClose, adjustedDuration);
+    timerRef.current = setTimeout(() => {
+      onCloseAction();
+    }, duration);
 
-    // Cleanup
+    // Cleanup à la destruction du composant
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [handleClose, adjustedDuration]);
-
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
+  }, [duration, onCloseAction]);
 
   const getTypeStyles = useCallback(() => {
     switch (type) {
@@ -59,7 +45,12 @@ export default function Notification({ message, type = 'error', onCloseAction = 
   }, [type]);
 
   return (
-    <div className={`fixed top-4 right-4 z-[60] ${getTypeStyles()} text-white px-4 py-3 rounded-lg shadow-lg border-l-4 min-w-[300px] max-w-[400px] animate-slide-in`}>
+    <div className={`fixed top-1/2 left-1/2 z-[60] transform -translate-x-1/2 -translate-y-1/2 ${getTypeStyles()} text-white px-4 py-3 rounded-lg shadow-lg border-l-4 min-w-[300px] max-w-[400px] animate-slide-in`}>
+      {type === 'success' && message.includes('Redirection') && (
+        <div className="flex items-center gap-2">
+          <Spinner size="small" color="white"/>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium">{message}</p>
         <button

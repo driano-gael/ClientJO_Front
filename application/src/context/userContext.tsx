@@ -19,9 +19,6 @@ import {
 } from '@/lib/api/core/tokenHelpers';
 import SessionExpiredModal from '@/components/connexion/SessionExpiredModal';
 
-// ----------------------
-// Types
-// ----------------------
 
 interface User {
   id: string;
