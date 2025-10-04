@@ -17,11 +17,11 @@ export function useTickets() {
       setLoading(true);
       setError(null);
       try {
-        const data = await TicketService.getAllTickets();
+        const data = await TicketService.getAllClientTickets();
         console.log("data", data);
         setTickets(data);
-      } catch (err) {
-        setError(err as Error);
+      } catch (e) {
+        const err = e as Error;
         console.error("erreur", err.message);
         setTickets([]);
       } finally {
