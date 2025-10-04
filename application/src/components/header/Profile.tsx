@@ -57,7 +57,9 @@ export default function Profile() {
             </li>
 
             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">
-              📦 Mes billets
+              <Link href="/billets">
+                📦 Mes billets
+              </Link>
             </li>
             <li
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"

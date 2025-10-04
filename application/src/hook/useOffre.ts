@@ -12,22 +12,16 @@ export function useOffres() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    console.log("useEffect déclenché dans useOffres");
     const fetchOffres = async () => {
-      console.log("Début de fetchOffres");
       setLoading(true);
       setError(null);
       try {
-        console.log("Appel OffreService.getAllOffre()");
         const data = await OffreService.getAllOffre();
-        console.log("Données reçues par getAllOffre:", data);
         setOffres(data);
       } catch (err) {
-        console.error("Erreur récupération des offres :", err);
         setError(err as Error);
         setOffres([]);
       } finally {
-        console.log("Fin de fetchOffres, loading à false");
         setLoading(false);
       }
     };
@@ -35,7 +29,6 @@ export function useOffres() {
     fetchOffres();
   }, []);
 
-  console.log("Rendu du hook useOffres", { offres, loading, error });
   return { offres, loading, error };
 }
 
