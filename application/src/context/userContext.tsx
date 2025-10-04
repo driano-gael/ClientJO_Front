@@ -10,12 +10,12 @@ import {
 import { useRouter } from 'next/navigation';
 import {
   login as loginService,
-  logout as logoutService,
   refreshToken,
 } from '@/lib/api/auth/authService';
 import {
   setSessionExpiredCallback,
   isTokenValid,
+  clearTokens,
 } from '@/lib/api/core/tokenHelpers';
 import SessionExpiredModal from '@/components/connexion/SessionExpiredModal';
 
@@ -54,42 +54,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // chargement local
   const loadUserFromLocalStorage = (): User | null => {
-    const email = localStorage.getItem('email');
-    const nom = localStorage.getItem('nom');
-    const id = localStorage.getItem('id');
-    if (email && nom && id) {
-      return { email, nom, id };
+    if (typeof window === 'undefined') return null;
+    try {
+      const email = localStorage.getItem('email');
+      const nom = localStorage.getItem('nom');
+      const id = localStorage.getItem('id');
+      if (email && nom && id) {
+        return { email, nom, id };
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des données utilisateur:', error);
     }
     return null;
   };
 
+  // Nettoyer complètement l'état utilisateur
+  const clearUserData = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('email');
+        localStorage.removeItem('nom');
+        localStorage.removeItem('id');
+      } catch (error) {
+        console.error('Erreur lors du nettoyage des données utilisateur:', error);
+      }
+    }
+    clearTokens();
+    setUser(null);
+  }, []);
+
   // tentative de restauration
-const tryRestoreUserFromStorage = useCallback((): boolean => {
-  const userData = loadUserFromLocalStorage();
-  if (userData) {
-    setUser(userData);
-    return true;
-  } else {
-    logoutService();
+  const tryRestoreUserFromStorage = useCallback((): boolean => {
+    const userData = loadUserFromLocalStorage();
+    if (userData) {
+      setUser(userData);
+      return true;
+    }
     return false;
-  }
-}, []);
+  }, []);
 
   // 🔒 Forcer la déconnexion (expiration de session)
-const forceLogout = useCallback(() => {
-  if (typeof window !== 'undefined') {
-    const currentPath = window.location.pathname;
-    if (currentPath !== '/' && currentPath !== '/login') {
-      setCurrentRoute(currentPath);
+  const forceLogout = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/' && currentPath !== '/login') {
+        setCurrentRoute(currentPath);
+      }
     }
-  }
-  logoutService();
-  localStorage.removeItem('email');
-  localStorage.removeItem('nom');
-  localStorage.removeItem('id');
-  setUser(null);
-  setShowSessionExpiredModal(true);
-}, []);
+
+    clearUserData();
+    setShowSessionExpiredModal(true);
+  }, [clearUserData]);
 
   const handleSessionExpired = () => {
     setShowSessionExpiredModal(false);
@@ -98,26 +113,56 @@ const forceLogout = useCallback(() => {
 
   //Initialisation de l'auth
   useEffect(() => {
+    let mounted = true;
+
     const checkAuth = async () => {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        try {
-          const tokenValid = isTokenValid();
-          if (tokenValid) {
-            tryRestoreUserFromStorage();
-          } else {
-            try {
-              await refreshToken();
-              tryRestoreUserFromStorage();
-            } catch {
-              logoutService();
+      if (typeof window === 'undefined') {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const tokenValid = isTokenValid();
+
+        if (tokenValid) {
+          // Token valide, essayer de restaurer l'utilisateur
+          if (mounted) {
+            const restored = tryRestoreUserFromStorage();
+            if (!restored) {
+              // Pas d'utilisateur en localStorage mais token valide
+              // Probablement un problème de sync, nettoyer
+              clearTokens();
             }
           }
-        } catch  {
-          logoutService();
+        } else {
+          // Token invalide ou absent, essayer le refresh
+          try {
+            await refreshToken();
+            if (mounted) {
+              const restored = tryRestoreUserFromStorage();
+              if (!restored) {
+                clearTokens();
+              }
+            }
+          } catch {
+            // Échec du refresh, nettoyer complètement
+            if (mounted) {
+              clearUserData();
+            }
+          }
+        }
+      } catch {
+        console.error('Erreur lors de la vérification de l\'authentification');
+        if (mounted) {
+          clearUserData();
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
         }
       }
-      setIsLoading(false);
     };
+
     setSessionExpiredCallback(forceLogout);
 
     const handleTokenRefreshed = () => {
@@ -133,11 +178,12 @@ const forceLogout = useCallback(() => {
     checkAuth();
 
     return () => {
+      mounted = false;
       if (typeof window !== 'undefined') {
         window.removeEventListener('tokenRefreshed', handleTokenRefreshed);
       }
     };
-  }, [tryRestoreUserFromStorage, forceLogout]);
+  }, [tryRestoreUserFromStorage, forceLogout, clearUserData]);
 
   // 🔓 login
   const login = async (email: string, password: string, shouldRedirect: boolean = true) => {
@@ -150,20 +196,19 @@ const forceLogout = useCallback(() => {
         id: '123456789',
       };
 
-      localStorage.setItem('email', fakeUser.email);
-      localStorage.setItem('nom', fakeUser.nom);
-      localStorage.setItem('id', fakeUser.id);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('email', fakeUser.email);
+        localStorage.setItem('nom', fakeUser.nom);
+        localStorage.setItem('id', fakeUser.id);
+      }
 
       setUser(fakeUser);
 
-      if (shouldRedirect) {
-        if (currentRoute) {
-          setTimeout(() => {
-            const target = currentRoute;
-            setCurrentRoute(null);
-            router.push(target);
-          }, 100);
-        }
+      if (shouldRedirect && currentRoute) {
+        const target = currentRoute;
+        setCurrentRoute(null);
+        // Redirection immédiate sans timeout pour éviter les race conditions
+        router.push(target);
       }
     } catch (error) {
       throw error;
@@ -172,11 +217,7 @@ const forceLogout = useCallback(() => {
 
   // 🔓 logout normal
   const logout = () => {
-    logoutService();
-    localStorage.removeItem('email');
-    localStorage.removeItem('nom');
-    localStorage.removeItem('id');
-    setUser(null);
+    clearUserData();
     router.push('/');
   };
 
