@@ -1,5 +1,4 @@
 import {useState, useEffect} from "react";
-import { OffreService } from "@/lib/api/service/offreService";
 import {Ticket} from "@/type/achat/ticket";
 import {TicketService} from "@/lib/api/service/ticketService";
 
