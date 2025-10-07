@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/navigation';
 import {
   login as loginService,
-  refreshToken,
+  refreshToken as refreshTokenService,
 } from '@/lib/api/auth/authService';
 import {
   setSessionExpiredCallback,
@@ -50,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [showSessionExpiredModal, setShowSessionExpiredModal] = useState(false);
   const [currentRoute, setCurrentRoute] = useState<string | null>(null);
+  const [isAuthenticating, setIsAuthenticating] = useState(false); // Nouveau flag
   const isAuthenticated = !!user;
 
   // chargement local
@@ -95,6 +96,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 🔒 Forcer la déconnexion (expiration de session)
   const forceLogout = useCallback(() => {
+    // Ne pas déclencher pendant l'authentification
+    if (isAuthenticating) {
+      console.log('[forceLogout] Authentification en cours, ignorer forceLogout');
+      return;
+    }
+
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
       if (currentPath !== '/' && currentPath !== '/login') {
@@ -104,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     clearUserData();
     setShowSessionExpiredModal(true);
-  }, [clearUserData]);
+  }, [clearUserData, isAuthenticating]);
 
   const handleSessionExpired = () => {
     setShowSessionExpiredModal(false);
@@ -116,6 +123,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true;
 
     const checkAuth = async () => {
+      // Ne pas vérifier pendant l'authentification
+      if (isAuthenticating) {
+        console.log('[checkAuth] Authentification en cours, skip checkAuth');
+        return;
+      }
+
       if (typeof window === 'undefined') {
         setIsLoading(false);
         return;
@@ -135,17 +148,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
           }
         } else {
-          // Token invalide ou absent, essayer le refresh
-          try {
-            await refreshToken();
-            if (mounted) {
-              const restored = tryRestoreUserFromStorage();
-              if (!restored) {
-                clearTokens();
+          // Token invalide ou absent
+          const refreshToken = localStorage.getItem(process.env.NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY || 'auth_refresh_token');
+
+          if (refreshToken) {
+            // Il y a un refresh token, essayer de l'utiliser
+            try {
+              console.log('[checkAuth] Token expiré, tentative de refresh');
+              await refreshTokenService();
+              if (mounted) {
+                const restored = tryRestoreUserFromStorage();
+                if (!restored) {
+                  clearTokens();
+                }
+              }
+            } catch {
+              // Échec du refresh, nettoyer complètement
+              console.log('[checkAuth] Refresh échoué, nettoyage');
+              if (mounted) {
+                clearUserData();
               }
             }
-          } catch {
-            // Échec du refresh, nettoyer complètement
+          } else {
+            // Pas de refresh token, nettoyer directement sans faire de requête
+            console.log('[checkAuth] Pas de refresh token disponible, nettoyage direct');
             if (mounted) {
               clearUserData();
             }
@@ -183,11 +209,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.removeEventListener('tokenRefreshed', handleTokenRefreshed);
       }
     };
-  }, [tryRestoreUserFromStorage, forceLogout, clearUserData]);
+  }, [tryRestoreUserFromStorage, forceLogout, clearUserData, isAuthenticating]);
 
   // 🔓 login
   const login = async (email: string, password: string, shouldRedirect: boolean = true) => {
     try {
+      setIsAuthenticating(true); // Marquer le début de l'authentification
+      console.log('[login] Début de l\'authentification');
+
       await loginService({ email, password });
 
       const fakeUser: User = {
@@ -203,6 +232,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(fakeUser);
+      console.log('[login] Utilisateur défini, authentification terminée');
 
       if (shouldRedirect && currentRoute) {
         const target = currentRoute;
@@ -212,6 +242,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       throw error;
+    } finally {
+      // Délai court pour s'assurer que localStorage est synchronisé
+      setTimeout(() => {
+        setIsAuthenticating(false);
+        console.log('[login] Flag isAuthenticating remis à false');
+      }, 100);
     }
   };
 
