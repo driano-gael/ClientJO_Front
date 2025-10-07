@@ -24,7 +24,8 @@ export default function BilletCard({ ticket, type }: props) {
       <p className="text-sm text-gray-700">Nombre de personnes : {ticket.offre.nb_personne}</p>
       <p className="text-sm text-gray-700">Montant : {ticket.offre.montant} €</p>
       <p className="text-sm text-gray-700 mb-4">Description : {ticket.offre.description}</p>
-      <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200">
+      <button
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200">
         Détails
       </button>
     </div>
