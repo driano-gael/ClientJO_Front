@@ -76,7 +76,6 @@ export function useEvenementByEpreuveId(id: number) {
       const data = await EvenementService.getEvenementByEpreuveId(id);
       setEvenement(data);
     } catch (err) {
-      console.error("Erreur récupération de l'événement :", err);
       setError(err as Error);
       setEvenement(null);
     } finally {
