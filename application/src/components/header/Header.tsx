@@ -43,7 +43,53 @@ import HeaderDesktop from './HeaderDesktop';
  * Composant Header principal qui affiche la version mobile ou desktop selon la taille d'écran.
  * Voir la documentation du module ci-dessus pour les détails complets.
  *
- * @returns Header adaptatif (mobile ou desktop) avec position sticky
+ * Le composant utilise le hook useIsMobile pour détecter automatiquement le type d'appareil
+ * et rendre le header approprié. Il maintient une position sticky pour une navigation
+ * constante et applique des styles visuels cohérents.
+ *
+ * @returns Header adaptatif (mobile ou desktop) avec position sticky et ombre portée
+ *
+ * @example
+ * ```tsx
+ * // Utilisation dans un layout principal
+ * import Header from '@/components/header/Header';
+ *
+ * function RootLayout({ children }) {
+ *   return (
+ *     <html>
+ *       <body>
+ *         <Header />
+ *         <main>{children}</main>
+ *         <footer>...</footer>
+ *       </body>
+ *     </html>
+ *   );
+ * }
+ *
+ * // Dans une page Next.js
+ * export default function HomePage() {
+ *   return (
+ *     <>
+ *       <Header />
+ *       <section>
+ *         <h1>Contenu de la page</h1>
+ *       </section>
+ *     </>
+ *   );
+ * }
+ *
+ * // Avec scroll automatique
+ * function ScrollToSection() {
+ *   return (
+ *     <div>
+ *       <Header />
+ *       <div style={{ scrollMarginTop: '80px' }}>
+ *         Contenu avec compensation pour header sticky
+ *       </div>
+ *     </div>
+ *   );
+ * }
+ * ```
  */
 export default function Header() {
   const isMobile = useIsMobile();
@@ -53,7 +99,7 @@ export default function Header() {
       className="sticky top-0 bg-base-100 shadow-[0_3px_12px_rgba(0,0,0,0.25)] z-50"
       style={{ scrollMarginTop: '0px' }} // Permet l'auto-scroll
     >
-      {isMobile ? <HeaderMobile/> : <HeaderDesktop/>}
+      {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
     </div>
   );
 }

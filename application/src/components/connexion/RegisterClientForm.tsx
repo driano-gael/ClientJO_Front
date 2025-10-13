@@ -1,3 +1,41 @@
+/**
+ * @module components/connexion/RegisterClientForm
+ * Module de composant RegisterClientForm pour l'inscription des nouveaux utilisateurs
+ *
+ * Ce module contient le composant RegisterClientForm qui gère le processus d'inscription
+ * des nouveaux utilisateurs de l'application. Il offre un formulaire complet avec
+ * validation côté client, gestion d'erreurs avancée et intégration avec l'API backend.
+ *
+ * ## Fonctionnalités principales
+ * - Formulaire d'inscription avec 5 champs obligatoires
+ * - Validation côté client avec messages d'erreur détaillés
+ * - Gestion des états de chargement et protection anti-spam
+ * - Acceptation des conditions d'utilisation
+ * - Notifications de succès/erreur avec composant dédié
+ * - Redirection automatique vers la connexion après succès
+ *
+ * ## Champs du formulaire
+ * - **Nom** : Nom de famille de l'utilisateur
+ * - **Prénom** : Prénom de l'utilisateur
+ * - **Téléphone** : Numéro de téléphone avec validation
+ * - **Email** : Adresse email avec validation format
+ * - **Mot de passe** : Mot de passe sécurisé
+ * - **CGU** : Acceptation des conditions générales (checkbox)
+ *
+ * ## Validation et sécurité
+ * - Validation côté client avant soumission
+ * - Protection contre les soumissions multiples
+ * - Gestion détaillée des erreurs API avec parsing
+ * - Autocomplétion des champs pour UX optimisée
+ *
+ * ## Intégration
+ * - Appel à l'API registerClient pour inscription
+ * - Utilise validateClientForm pour validation
+ * - Basculement vers connexion après inscription réussie
+ *
+ * @group Components
+ */
+
 'use client';
 
 import { useState, useCallback, useRef } from 'react';

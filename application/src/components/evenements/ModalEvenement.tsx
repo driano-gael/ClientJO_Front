@@ -1,3 +1,49 @@
+/**
+ * @module components/evenements/ModalEvenement
+ * Module de composant ModalEvenement pour l'affichage détaillé des événements olympiques
+ *
+ * Ce module contient le composant ModalEvenement qui affiche un modal complet présentant
+ * toutes les informations d'un événement olympique avec ses épreuves associées.
+ * Il gère la réservation de places, l'authentification et l'interaction utilisateur.
+ *
+ * ## Fonctionnalités principales
+ * - Modal plein écran avec overlay semi-transparent
+ * - Affichage détaillé des informations d'événement
+ * - Groupement des épreuves par discipline
+ * - Gestion des réservations de places en temps réel
+ * - Intégration avec le système d'authentification
+ * - Calcul dynamique des places restantes
+ * - Interface responsive avec scrolling automatique
+ *
+ * ## Informations affichées
+ * - **Date** : Date formatée de l'événement
+ * - **Description** : Description complète de l'événement
+ * - **Épreuves** : Liste groupée par discipline avec détails
+ * - **Lieu** : Nom du lieu et horaires
+ * - **Places disponibles** : Calcul en temps réel
+ * - **Offres** : Prix et options de réservation
+ *
+ * ## Gestion des réservations
+ * - Calcul automatique des places réservées
+ * - Mise à jour en temps réel des disponibilités
+ * - Integration avec le système de réservation
+ * - Validation des capacités restantes
+ *
+ * ## Authentification
+ * - Vérification du statut de connexion
+ * - Modal de connexion intégré si non authentifié
+ * - Accès conditionnel aux fonctionnalités de réservation
+ *
+ * ## Design et UX
+ * - Modal centré avec coins arrondis
+ * - Bordure accent distinctive
+ * - Bouton de fermeture en overlay
+ * - Sections organisées avec séparateurs visuels
+ * - Scrolling fluide pour contenu long
+ *
+ * @group Components
+ */
+
 'use client';
 
 import {useEvenementByEpreuveId} from "@/hook/useEpreuve";
@@ -10,12 +56,47 @@ import DisplayedOffre from "@/components/evenements/DisplayedOffre";
 import {useOffres} from "@/hook/useOffre";
 import {useReservationOffer} from "@/hook/useReservationOffer";
 
+/**
+ * Props du composant ModalEvenement
+ */
 type Props = {
+  /** ID de l'épreuve pour charger les données de l'événement associé */
   epreuveId: number;
+  /** Fonction appelée lors de la fermeture du modal */
   onCloseAction: () => void;
 };
 
-
+/**
+ * Composant ModalEvenement pour l'affichage détaillé des événements olympiques.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * Ce composant affiche un modal complet avec toutes les informations d'un événement,
+ * incluant les épreuves groupées par discipline, les informations de lieu et horaires,
+ * ainsi que la gestion des réservations avec authentification intégrée.
+ *
+ * @param props - Les propriétés du composant
+ * @param props.epreuveId - ID de l'épreuve pour charger l'événement
+ * @param props.onCloseAction - Callback de fermeture du modal
+ *
+ * @returns Modal d'événement avec informations complètes et gestion des réservations
+ *
+ * @example
+ * ```tsx
+ * // Utilisation dans une liste d'épreuves
+ * const [selectedEpreuve, setSelectedEpreuve] = useState<number | null>(null);
+ *
+ * <ModalEvenement
+ *   epreuveId={selectedEpreuve}
+ *   onCloseAction={() => setSelectedEpreuve(null)}
+ * />
+ *
+ * // Avec gestion d'état pour l'ouverture
+ * <CardEpreuve
+ *   epreuve={epreuve}
+ *   onClick={(id) => setSelectedEpreuve(id)}
+ * />
+ * ```
+ */
 export default function ModalEvenement({epreuveId, onCloseAction}: Props) {
   const {offres} = useOffres();
   const {evenement, loading, error} = useEvenementByEpreuveId(epreuveId);
