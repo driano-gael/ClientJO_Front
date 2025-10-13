@@ -2,9 +2,13 @@ import {useState, useEffect} from "react";
 import {Offre} from "@/type/achat/offre";
 import { OffreService } from "@/lib/api/service/offreService";
 
-
 /**
- * Hook personnalisé pour récupérer les offres
+ * Hook personnalisé pour récupérer la liste des offres avec gestion d'état
+ * @returns Objet contenant les offres, l'état de chargement et les erreurs
+ * @example
+ * const { offres, loading, error } = useOffres();
+ * if (loading) return <Spinner />;
+ * if (error) return <div>Erreur: {error.message}</div>;
  */
 export function useOffres() {
   const [offres, setOffres] = useState<Offre[]>([]);
@@ -31,4 +35,3 @@ export function useOffres() {
 
   return { offres, loading, error };
 }
-

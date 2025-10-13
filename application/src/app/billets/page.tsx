@@ -1,10 +1,61 @@
+/**
+ * Page des billets de l'application ClientJO - Visualisation des tickets achetés
+ *
+ * Cette page permet aux utilisateurs authentifiés de visualiser tous leurs billets
+ * achetés pour les Jeux Olympiques, organisés par statut (valides/invalides).
+ * Elle offre l'accès aux QR codes pour l'entrée aux événements.
+ *
+ * ## Structure de la page
+ * - **Header** : Navigation principale avec authentification
+ * - **Section billets valides** : Billets utilisables avec QR codes
+ * - **Section billets invalides** : Billets expirés ou annulés
+ * - **Cartes de billets** : Interface détaillée pour chaque ticket
+ *
+ * ## Fonctionnalités principales
+ * - Affichage de tous les billets de l'utilisateur connecté
+ * - Séparation claire entre billets valides et invalides
+ * - Accès aux QR codes pour validation à l'entrée
+ * - Informations complètes sur chaque billet
+ * - Interface responsive pour tous les appareils
+ *
+ * ## Gestion des données
+ * - **useTickets hook** : Récupération des tickets depuis l'API
+ * - Filtrage automatique par statut (valide/invalide)
+ * - Chargement asynchrone avec gestion d'erreurs
+ * - Authentification requise pour accéder aux données
+ *
+ * ## États des billets
+ * - **Billets valides** : Fond vert, utilisables pour l'entrée
+ * - **Billets invalides** : Fond rouge, expirés ou annulés
+ * - QR codes accessibles pour tous les billets
+ *
+ * ## Interface utilisateur
+ * - Design centré et responsive (max-width: 32rem)
+ * - Sections clairement séparées par couleur
+ * - Messages informatifs si aucun billet
+ * - Cartes de billets interactives avec modals QR code
+ *
+ * ## Sécurité
+ * - Accès restreint aux utilisateurs authentifiés
+ * - Données personnelles protégées
+ * - QR codes générés dynamiquement et sécurisés
+ *
+ * @module app/billets/page
+ * @group Pages
+ */
+
 'use client'
 
 import {useTickets} from "@/hook/useTickets";
 import BilletCard from "@/components/billet/billetCard";
 import Header from "@/components/header/Header";
 
-
+/**
+ * Page des billets pour la visualisation des tickets achetés.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * @returns Page complète d'affichage des billets avec statuts
+ */
 export default function Billet() {
     const {tickets} = useTickets()
     const billetsValides = tickets?.filter(ticket => ticket.statut === "valide");

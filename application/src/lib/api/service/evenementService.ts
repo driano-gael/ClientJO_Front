@@ -1,28 +1,40 @@
 import {fetchApi} from '@/lib/api/core/fetchWrappers';
 import {Evenement} from "@/type/evenement/evenement";
 
+/**
+ * Interface définissant les filtres disponibles pour les événements
+ */
 export interface EvenementFilters {
-  description?: string; // Filtrage par description (recherche partielle)
-  lieuId?: number; // Filtrage par lieu
-  dateDebut?: string; // Date de début pour filtrer par période
-  dateFin?: string; // Date de fin pour filtrer par période
-  page?: number; // Numéro de page pour la pagination
-  limit?: number; // Nombre d'éléments par page
-  sortBy?: 'date' | 'description' | 'lieu'; // Champ de tri
-  sortOrder?: 'asc' | 'desc'; // Ordre de tri
+  /** Filtrage par description (recherche partielle) */
+  description?: string;
+  /** Filtrage par lieu */
+  lieuId?: number;
+  /** Date de début pour filtrer par période */
+  dateDebut?: string;
+  /** Date de fin pour filtrer par période */
+  dateFin?: string;
+  /** Numéro de page pour la pagination */
+  page?: number;
+  /** Nombre d'éléments par page */
+  limit?: number;
+  /** Champ de tri */
+  sortBy?: 'date' | 'description' | 'lieu';
+  /** Ordre de tri */
+  sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * Service pour la gestion des événements
+ */
 export class EvenementService {
-  // Chemin de base pour les endpoints des événements
+  /** Chemin de base pour les endpoints des événements */
   private static readonly BASE_PATH = '/evenement';
 
   /**
    * Récupère tous les événements avec filtres optionnels
-   *
    * @param filters - Filtres optionnels pour la recherche et la pagination
    * @returns Promise<Evenement[]> - Liste des événements
    * @throws Error - En cas d'erreur de l'API ou de réseau
-   *
    * Route Django: path('evenement/', EvenementListView.as_view(), name='evenement-list')
    */
   static async getAllEvenements(filters?: EvenementFilters): Promise<Evenement[]> {
@@ -51,11 +63,9 @@ export class EvenementService {
 
   /**
    * Récupère un événement par son ID
-   *
    * @param id - ID de l'événement à récupérer
-   * @returns Promise<Evenement> - L'événement correspondant à l'ID
-   * @throws Error - En cas d'erreur de l'API ou de réseau
-   *
+   * @returns Promise<Evenement> - L'événement correspondant
+   * @throws Error - En cas d'erreur de l'API ou si l'événement n'existe pas
    * Route Django: path('evenement/<int:pk>/', EvenementDetailView.as_view(), name='evenement-detail')
    */
   static async getEvenementById(id: number): Promise<Evenement> {
@@ -67,4 +77,3 @@ export class EvenementService {
   }
 
 }
-

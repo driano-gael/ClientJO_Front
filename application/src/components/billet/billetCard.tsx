@@ -1,13 +1,72 @@
+/**
+ * Module de composant BilletCard pour l'affichage des billets des Jeux Olympiques
+ *
+ * Ce module contient le composant BilletCard qui présente visuellement un ticket d'événement sportif
+ * avec toutes les informations essentielles :
+ * - Informations du client (nom, prénom)
+ * - Détails de l'événement (description, lieu, date)
+ * - Informations de l'offre (libellé, nombre de personnes, montant, description)
+ * - Statut du billet (valide/invalide) avec codes couleur appropriés
+ * - Bouton d'accès au QR code pour validation à l'entrée
+ *
+ * ## Fonctionnalités principales
+ * Le composant adapte automatiquement son apparence selon le statut :
+ * - **Billet valide** : fond vert clair avec badge vert
+ * - **Billet invalide** : fond rouge clair avec badge rouge
+ *
+ * ## Interactions utilisateur
+ * - Clic sur le bouton "QrCode" ouvre un modal avec le QR code scannable
+ * - Interface responsive adaptée aux différentes tailles d'écran
+ * - Gestion d'état pour l'ouverture/fermeture du modal QR code
+ *
+ * ## Logique interne
+ * - Calcul automatique des classes CSS selon le statut du billet
+ * - Gestion de l'état du modal QR code avec useState
+ * - Rendu conditionnel du modal selon l'état d'ouverture
+ *
+ * @module components/billet/billetCard
+ * @group Components
+ */
+
 import { Ticket } from "@/type/achat/ticket";
 import { useState } from "react";
 import QRCodeModal from "@/components/billet/qrCodeModal";
 
-type Props = {
+/**
+ * Props du composant BilletCard
+ */
+export type BilletCardProps = {
+  /** Ticket à afficher dans la carte */
   ticket: Ticket;
+  /** Type du billet - détermine l'apparence visuelle */
   type: "valide" | "invalide";
 };
 
-export default function BilletCard({ ticket, type }: Props) {
+/**
+ * Composant BilletCard pour l'affichage des billets des Jeux Olympiques.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * @param props - Les propriétés du composant
+ * @returns Carte de billet interactive avec modal QR code intégré
+ *
+ * @example
+ * ```tsx
+ * // Affichage d'un billet valide
+ * <BilletCard
+ *   ticket={{
+ *     id: 123,
+ *     client: { nom: "Dupont", prenom: "Jean" },
+ *     evenement: { description: "Finale 100m" },
+ *     offre: { libelle: "Catégorie A", nb_personne: 2, montant: 150 }
+ *   }}
+ *   type="valide"
+ * />
+ *
+ * // Affichage d'un billet invalide
+ * <BilletCard ticket={expiredTicket} type="invalide" />
+ * ```
+ */
+export default function BilletCard({ ticket, type }: BilletCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isValide = type === "valide";
   const bgColor = isValide ? "bg-green-50" : "bg-red-50";

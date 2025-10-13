@@ -1,14 +1,29 @@
 import {fetchApi} from '@/lib/api/core/fetchWrappers';
 import {Discipline} from '@/type/evenement/discipline';
 
+/**
+ * @group Services
+ */
+
+/**
+ * Interface définissant les filtres disponibles pour les disciplines
+ */
 export interface DisciplineFilters {
-  nom?: string; // Filtrage par nom (recherche partielle)
-  page?: number; // Numéro de page pour la pagination
-  limit?: number; // Nombre d'éléments par page
-  sortBy?: 'nom'; // Champ de tri (actuellement seul 'nom' est supporté)
-  sortOrder?: 'asc' | 'desc'; // Ordre de tri (ascendant ou descendant)
+  /** Filtrage par nom (recherche partielle) */
+  nom?: string;
+  /** Numéro de page pour la pagination */
+  page?: number;
+  /** Nombre d'éléments par page */
+  limit?: number;
+  /** Champ de tri (actuellement seul 'nom' est supporté) */
+  sortBy?: 'nom';
+  /** Ordre de tri (ascendant ou descendant) */
+  sortOrder?: 'asc' | 'desc';
 }
 
+/**
+ * Service pour la gestion des disciplines sportives
+ */
 export class DisciplineService {
   // Chemin de base pour les endpoints des disciplines
   private static readonly BASE_PATH = '/discipline';

@@ -1,20 +1,34 @@
 import Image from 'next/image';
 
-type Props = {
+/**
+ * Props du composant HomeCard
+ */
+export type HomeCardProps = {
+  /** Titre de la carte */
   title: string;
+  /** Source de l'image */
   imageSrc: string;
+  /** Texte alternatif de l'image */
   imageAlt: string;
+  /** Texte de présentation */
   speech: string;
+  /** Orientation de la carte (normale ou inversée) */
   orientation?: 'normal' | 'reverse';
 };
 
+/**
+ * Composant de carte de présentation pour la page d'accueil
+ * Affiche une image avec un titre et un texte descriptif
+ * @param props - Les propriétés du composant
+ * @returns {JSX.Element} Carte de présentation
+ */
 export default function HomeCard({
   title,
   imageSrc,
   imageAlt,
   speech,
   orientation = 'normal',
-}: Props) {
+}: HomeCardProps) {
 
     const isReverse = orientation === 'reverse';
     const smDirection = isReverse ? 'lg:flex-row-reverse' : 'lg:flex-row';
