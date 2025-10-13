@@ -1,3 +1,46 @@
+/**
+ * Page du panier de l'application ClientJO - Gestion des réservations
+ *
+ * Cette page permet aux utilisateurs de visualiser, modifier et valider leur panier
+ * de billets pour les Jeux Olympiques. Elle offre une interface complète pour
+ * la gestion des réservations avant le paiement.
+ *
+ * ## Structure de la page
+ * - **Header** : Navigation principale avec compteur du panier
+ * - **Groupement par événement** : Organisation claire des offres sélectionnées
+ * - **Contrôles de quantité** : Boutons +/- pour ajuster les réservations
+ * - **Récapitulatif financier** : Total et détails des montants
+ * - **Bouton de validation** : Processus de paiement
+ *
+ * ## Fonctionnalités principales
+ * - Affichage des offres groupées par événement
+ * - Modification des quantités avec contrôles +/-
+ * - Suppression complète d'offres (icône poubelle)
+ * - Calcul automatique des totaux
+ * - Validation et redirection vers le paiement
+ * - Vidage complet du panier
+ *
+ * ## Gestion d'état Redux
+ * - **useSelector** : Récupération des items du panier
+ * - **useDispatch** : Actions d'ajout/suppression
+ * - **Persistance** : Sauvegarde automatique en localStorage
+ * - **Synchronisation** : État partagé dans toute l'application
+ *
+ * ## Intégrations API
+ * - **EvenementService** : Récupération des détails d'événements
+ * - **OffreService** : Données des offres via useOffres hook
+ * - **PaiementService** : Processus de validation et paiement
+ *
+ * ## Interface utilisateur
+ * - Design responsive adapté à tous les écrans
+ * - Icônes intuitives pour les actions
+ * - Affichage des places restantes
+ * - Notifications pour le feedback utilisateur
+ *
+ * @module app/panier/page
+ * @group Pages
+ */
+
 'use client';
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,6 +57,12 @@ import Notification from "@/components/common/Notification";
 import Spinner from "@/components/common/Spinner";
 import {NotificationProps} from "@/type/common/notification";
 
+/**
+ * Page du panier pour la gestion des réservations de billets.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * @returns Page complète de gestion du panier avec validation
+ */
 export default function PanierPage() {
   const dispatch = useDispatch();
   const router = useRouter();

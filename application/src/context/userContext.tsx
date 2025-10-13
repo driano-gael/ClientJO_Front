@@ -19,14 +19,19 @@ import {
 } from '@/lib/api/core/tokenHelpers';
 import SessionExpiredModal from '@/components/connexion/SessionExpiredModal';
 
-
-interface User {
+/**
+ * Interface représentant un utilisateur
+ */
+export interface User {
   id: string;
   nom: string;
   email: string;
 }
 
-interface AuthContextType {
+/**
+ * Interface du contexte d'authentification
+ */
+export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;

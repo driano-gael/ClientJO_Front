@@ -1,6 +1,13 @@
 import { getAuthToken } from './tokenHelpers';
 
-
+/**
+ * Construit les en-têtes HTTP pour une requête API
+ * @param requiresAuth - Indique si la requête nécessite une authentification
+ * @param baseHeaders - En-têtes de base à inclure (optionnel)
+ * @returns Headers configurés pour la requête
+ * @example
+ * const headers = buildHeaders(true, { 'Custom-Header': 'value' });
+ */
 export function buildHeaders(
   requiresAuth: boolean,
   baseHeaders: HeadersInit = {}
@@ -32,10 +39,18 @@ export function buildHeaders(
 }
 
 
+/**
+ * Effectue une requête HTTP vers l'API avec gestion des en-têtes et de l'authentification
+ * @param endpoint - Point de terminaison de l'API
+ * @param options - Options de la requête fetch
+ * @param requiresAuth - Indique si la requête nécessite une authentification
+ * @returns Promise contenant la réponse Response
+ * @throws Error - En cas d'erreur réseau ou de configuration
+ */
 export async function makeRequest(
     endpoint: string,
-    options: RequestInit,
-    requiresAuth: boolean
+    options: RequestInit = {},
+    requiresAuth: boolean = true
 ): Promise<Response> {
     const headers = buildHeaders(requiresAuth, options.headers);
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -51,6 +66,15 @@ export async function makeRequest(
 }
 
 
+/**
+ * Tente de rafraîchir le token d'authentification en utilisant le refresh token
+ * @returns Promise<boolean> - true si le token a été rafraîchi avec succès, false sinon
+ * @example
+ * const success = await tryRefreshToken();
+ * if (success) {
+ *   // Token rafraîchi, on peut réessayer la requête
+ * }
+ */
 export async function tryRefreshToken(): Promise<boolean> {
   console.log("[tryRefreshToken] Tentative de rafraîchissement du token");
   const refreshTokenKey = process.env.NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY!;

@@ -2,9 +2,13 @@ import {useState, useEffect} from "react";
 import {Ticket} from "@/type/achat/ticket";
 import {TicketService} from "@/lib/api/service/ticketService";
 
-
 /**
- * Hook personnalisé pour récupérer les tickets
+ * Hook personnalisé pour récupérer les tickets du client avec gestion d'état
+ * @returns Objet contenant les tickets, l'état de chargement et les erreurs
+ * @example
+ * const { tickets, loading, error } = useTickets();
+ * if (loading) return <Spinner />;
+ * if (error) return <div>Erreur de chargement des tickets</div>;
  */
 export function useTickets() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -33,4 +37,3 @@ export function useTickets() {
 
   return { tickets, loading, error };
 }
-

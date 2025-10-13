@@ -7,14 +7,22 @@ import {EvenementService} from "@/lib/api/service/evenementService";
 
 
 /**
- * Hook personnalisé pour récupérer les épreuves en tant que cartes
- * @param initialFilters Optionnel : filtres à passer au service
+ * Hook personnalisé pour récupérer les épreuves au format carte avec gestion d'état
+ * @param initialFilters - Filtres optionnels à appliquer lors du chargement initial
+ * @returns Objet contenant les épreuves au format carte, l'état de chargement, les erreurs et une fonction de rafraîchissement
+ * @example
+ * const { epreuves, loading, error, refreshEpreuves } = useEpreuvesCards();
+ * const { epreuves: filteredEpreuves } = useEpreuvesCards({ disciplineId: 1 });
  */
 export function useEpreuvesCards(initialFilters?: EpreuveFilters) {
   const [epreuves, setEpreuves] = useState<EpreuveCardType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
+  /**
+   * Fonction pour récupérer les épreuves avec filtres optionnels
+   * @param filters - Filtres à appliquer à la requête
+   */
   const fetchEpreuves = useCallback(async (filters?: EpreuveFilters) => {
     setLoading(true);
     setError(null);

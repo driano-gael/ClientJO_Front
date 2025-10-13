@@ -4,11 +4,18 @@ import {formatDateFr, formatHeure} from "@/utils/formatDate";
 
 export type { EpreuveFilters } from '@/type/evenement/epreuve';
 
+/**
+ * Service pour la gestion des épreuves sportives
+ */
 export class EpreuveService {
+  /** Chemin de base pour les endpoints des épreuves */
   private static readonly BASE_PATH = '/epreuve';
 
   /**
    * Récupère toutes les épreuves avec filtres optionnels
+   * @param filters - Filtres optionnels pour la recherche et pagination
+   * @returns Promise<Epreuve[]> - Liste des épreuves
+   * @throws Error - En cas d'erreur de l'API ou de réseau
    * Route Django: path('epreuve/', EpreuveListView.as_view(), name='epreuve-list')
    */
   static async getAllEpreuves(filters?: EpreuveFilters): Promise<Epreuve[]> {
@@ -33,15 +40,33 @@ export class EpreuveService {
 
   /**
    * Récupère une épreuve par son ID
+   * @param id - ID de l'épreuve à récupérer
+   * @returns Promise<Epreuve> - L'épreuve correspondante
+   * @throws Error - En cas d'erreur de l'API ou si l'épreuve n'existe pas
    * Route Django: path('epreuve/<int:pk>/', EpreuveDetailView.as_view(), name='epreuve-detail')
    */
   static async getEpreuveById(id: number): Promise<Epreuve> {
     return fetchApi<Epreuve>(`${this.BASE_PATH}/${id}/`);
   }
 
+  /**
+   * Transforme une liste d'épreuves en format carte pour l'affichage
+   * @param epreuves - Liste des épreuves à transformer
+   * @returns EpreuveCardType[] - Liste des épreuves au format carte
+   */
+  static transformToCardType(epreuves: Epreuve[]): EpreuveCardType[] {
+    return epreuves.map(mapEpreuveToCard);
+  }
+
+  /**
+   * Récupère toutes les épreuves directement au format carte pour l'affichage
+   * @param filters - Filtres optionnels pour la recherche et pagination
+   * @returns Promise<EpreuveCardType[]> - Liste des épreuves au format carte
+   * @throws Error - En cas d'erreur de l'API ou de réseau
+   */
   static async getAllEvenementsAsCards(filters?: EpreuveFilters): Promise<EpreuveCardType[]> {
-    const evenements = await this.getAllEpreuves(filters);
-    return evenements.map(mapEpreuveToCard);
+    const epreuves = await this.getAllEpreuves(filters);
+    return this.transformToCardType(epreuves);
   }
 }
 

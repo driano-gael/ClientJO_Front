@@ -11,7 +11,27 @@ if (!baseUrl) throw new Error("API base URL is not défini.");
 if (!tokenKey) throw new Error("NEXT_PUBLIC_AUTH_TOKEN_KEY est manquant.");
 if (!refreshKey) throw new Error("NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY est manquant.");
 
-
+/**
+ * Fonction principale pour effectuer des appels API avec gestion automatique de l'authentification
+ * Gère automatiquement le rafraîchissement des tokens en cas d'expiration
+ * @param endpoint - Point de terminaison de l'API (chemin relatif)
+ * @param options - Options pour la requête fetch (méthode, headers, body, etc.)
+ * @param requiresAuth - Indique si la requête nécessite une authentification (défaut: true)
+ * @returns Promise contenant la réponse désérialisée de l'API
+ * @throws Error - En cas d'erreur réseau, d'authentification ou de validation
+ * @example
+ * // Appel simple avec authentification
+ * const data = await fetchApi<User[]>('/users');
+ *
+ * // Appel POST avec données
+ * const result = await fetchApi<CreateResponse>('/users', {
+ *   method: 'POST',
+ *   body: JSON.stringify(userData)
+ * });
+ *
+ * // Appel sans authentification
+ * const publicData = await fetchApi<PublicData>('/public/info', {}, false);
+ */
 export async function fetchApi<T = unknown>(
     endpoint: string,
     options: RequestInit = {},

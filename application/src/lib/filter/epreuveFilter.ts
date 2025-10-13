@@ -1,5 +1,17 @@
 import {Epreuve, EpreuveCardType, EpreuveFilters} from "@/type/evenement/epreuve";
 
+/**
+ * Filtre une liste d'épreuves selon les critères spécifiés
+ * @param epreuves - Liste des épreuves au format carte à filtrer
+ * @param filters - Critères de filtrage à appliquer
+ * @param fullEpreuves - Liste complète des épreuves avec toutes les données (optionnel, nécessaire pour filtrer par disciplineId)
+ * @returns Liste filtrée des épreuves
+ * @example
+ * const filteredEpreuves = filterEpreuves(epreuves, {
+ *   libelle: 'natation',
+ *   date: '2024-07-26'
+ * });
+ */
 export function filterEpreuves(
   epreuves: EpreuveCardType[],
   filters: EpreuveFilters,

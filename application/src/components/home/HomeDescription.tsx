@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+
+/**
+ * Composant décrivant l'accueil et l'appel à l'action.
+ *
+ * @returns {JSX.Element} Section de description de la page d'accueil.
+ */
 export default function HomeDescription() {
   return (
     <section className="flex flex-col items-center">

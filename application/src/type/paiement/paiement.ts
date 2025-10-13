@@ -1,18 +1,26 @@
 import {OffrePanier} from "@/type/achat/offrePanier";
 
-
-type PaymentStatus =
+/**
+ * Statut de paiement possible
+ */
+export type PaymentStatus =
   | "requires_confirmation"
   | "succeeded"
   | "failed"
   | "refunded";
 
-interface PaiementCharge {
+/**
+ * Interface représentant une charge de paiement
+ */
+export interface PaiementCharge {
   id: string;
   montant: number;
 }
 
-interface PaiementErreur {
+/**
+ * Interface représentant une erreur de paiement
+ */
+export interface PaiementErreur {
   message: string;
 }
 

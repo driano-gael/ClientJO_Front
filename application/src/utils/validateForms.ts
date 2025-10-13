@@ -1,4 +1,7 @@
-type PartialFormData = Partial<{
+/**
+ * Type représentant les données partielles d'un formulaire client
+ */
+export type PartialFormData = Partial<{
     email: string;
     password: string;
     nom: string;
@@ -7,8 +10,16 @@ type PartialFormData = Partial<{
     acceptTerms: boolean;
 }>;
 
-type Errors = Partial<Record<keyof PartialFormData, string>>;
+/**
+ * Type représentant les erreurs de validation d'un formulaire
+ */
+export type Errors = Partial<Record<keyof PartialFormData, string>>;
 
+/**
+ * Valide les données d'un formulaire client
+ * @param formData - Les données du formulaire à valider
+ * @returns Un objet contenant les erreurs de validation
+ */
 export function validateClientForm(formData: PartialFormData): Errors {
     const errors: Errors = {};
 
