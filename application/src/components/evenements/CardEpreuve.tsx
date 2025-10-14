@@ -49,7 +49,7 @@ type Props = {
   /** Données de l'épreuve à afficher dans la carte */
   epreuve: EpreuveCardType;
   /** Fonction appelée lors du clic sur la carte, recevant l'ID de l'épreuve */
-  onClick: (id: number) => void;
+  onCardClickAction: (id: number) => void;
 };
 
 /**
@@ -91,14 +91,14 @@ type Props = {
  * ))}
  * ```
  */
-export default function CardEpreuve({epreuve, onClick}: Props) {
+export default function CardEpreuve({epreuve, onCardClickAction}: Props) {
 
     return (
-        {/* Container principal avec design arrondi et interactions */}
+        // Container principal avec design arrondi et interactions
         <div
             className="text-black bg-base-100 w-full flex flex-col px-[1%] align-center items-center my-1 rounded-tl-[20px] rounded-br-[20px] cursor-pointer hover:shadow-lg transition-shadow duration-200"
             style={{boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.5)"}}
-            onClick={() => onClick(epreuve.id)}
+            onClick={() => onCardClickAction(epreuve.id)}
         >
             {/* Section date avec séparateur */}
             <div className="font-bold text-center mt-1">

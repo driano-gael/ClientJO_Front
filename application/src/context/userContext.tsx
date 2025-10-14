@@ -49,6 +49,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Provider
 // ----------------------
 
+/**
+ * Fournit le contexte d'authentification à l'ensemble de l'application.
+ * Gère l'état utilisateur, la connexion, la déconnexion, la restauration de session,
+ * la gestion des tokens et l'affichage du modal d'expiration de session.
+ *
+ * @param children Les composants enfants qui auront accès au contexte d'authentification.
+ * @returns Le provider AuthContext englobant les enfants.
+ *
+ * @example
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -58,7 +71,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false); // Nouveau flag
   const isAuthenticated = !!user;
 
-  // chargement local
+  /**
+   * Charge les informations de l'utilisateur depuis le localStorage du navigateur.
+   *
+   * @returns {User | null} L'utilisateur restauré ou null si aucune donnée valide n'est trouvée.
+   */
   const loadUserFromLocalStorage = (): User | null => {
     if (typeof window === 'undefined') return null;
     try {
@@ -74,7 +91,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return null;
   };
 
-  // Nettoyer complètement l'état utilisateur
+  /**
+   * Nettoie toutes les informations utilisateur et tokens du stockage local et du contexte.
+   * Utilisé lors de la déconnexion ou de l'expiration de session.
+   */
   const clearUserData = useCallback(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -89,7 +109,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
-  // tentative de restauration
+  /**
+   * Tente de restaurer l'utilisateur depuis le localStorage.
+   *
+   * @returns {boolean} true si l'utilisateur a été restauré, false sinon.
+   */
   const tryRestoreUserFromStorage = useCallback((): boolean => {
     const userData = loadUserFromLocalStorage();
     if (userData) {
@@ -99,7 +123,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false;
   }, []);
 
-  // 🔒 Forcer la déconnexion (expiration de session)
+  /**
+   * Force la déconnexion de l'utilisateur (ex : expiration de session).
+   * Affiche le modal d'expiration de session et nettoie l'état utilisateur.
+   */
   const forceLogout = useCallback(() => {
     // Ne pas déclencher pendant l'authentification
     if (isAuthenticating) {
@@ -300,6 +327,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 // Hook personnalisé
 // ----------------------
 
+/**
+ * Hook personnalisé pour accéder au contexte d'authentification.
+ * Doit être utilisé à l'intérieur d'un <AuthProvider>.
+ *
+ * @returns Le contexte d'authentification (AuthContextType).
+ * @throws Erreur si utilisé en dehors d'un AuthProvider.
+ *
+ * @example
+ * const { user, login, logout } = useAuth();
+ */
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {

@@ -1,5 +1,16 @@
 import HomeCard from "./HomeCard";
 
+/**
+ * Composant de présentation de la page d'accueil.
+ * Affiche plusieurs cartes d'information sur les Jeux Olympiques de Paris 2024.
+ * Utilise le composant HomeCard pour chaque section de présentation.
+ *
+ * @returns JSX.Element Le composant de présentation
+ * @example
+ * ```tsx
+ * return <HomePresentation />
+ * ```
+ */
 export default function HomePresentation() {
   return (
     <section className="mx-[3%] my-[40px] bg-base-100 border-1 border-accent rounded-[20px]">
