@@ -1,14 +1,108 @@
+/**
+ * @module components/evenements/SearchEpreuveDesktop
+ * Module de composant SearchEpreuveDesktop pour la recherche et le filtrage des épreuves sur ordinateurs de bureau
+ *
+ * Ce module contient le composant SearchEpreuveDesktop qui fournit une interface de recherche
+ * optimisée pour les ordinateurs de bureau avec une mise en page horizontale et des
+ * fonctionnalités de filtrage avancées. Il permet la recherche par discipline, épreuve et date.
+ *
+ * ## Fonctionnalités principales
+ * - Interface horizontale optimisée pour écrans larges
+ * - Recherche en temps réel avec debounce (150ms) pour optimiser les performances
+ * - Autocomplete intelligent pour disciplines et épreuves
+ * - Gestion des clics extérieurs pour fermer les listes déroulantes
+ * - Filtrage par date minimum avec sélecteur de date natif
+ * - Bouton de réinitialisation des filtres
+ *
+ * ## Interface desktop optimisée
+ * - Layout en ligne avec tous les filtres visibles simultanément
+ * - Champs de recherche avec largeurs adaptées au contenu
+ * - Listes déroulantes positionnées intelligemment
+ * - Design spacieux tirant parti de l'espace disponible
+ * - Navigation keyboard-friendly avec tabindex appropriés
+ *
+ * ## Recherche intelligente
+ * - **Disciplines** : Recherche textuelle avec filtrage en temps réel
+ * - **Épreuves** : Filtrage contextuel selon la discipline sélectionnée
+ * - **Debounce** : Optimisation des performances avec délai de 150ms
+ * - **Autocomplete** : Suggestions en temps réel avec mise en surbrillance
+ *
+ * ## Gestion d'état avancée
+ * - États locaux synchronisés avec les filtres parents
+ * - Références DOM pour détecter les interactions extérieures
+ * - Callbacks optimisés avec useCallback pour éviter les re-rendus
+ * - Gestion des focus/blur pour une UX fluide
+ *
+ * ## Performance
+ * - Debounce sur les recherches pour limiter les appels
+ * - useCallback pour optimiser les gestionnaires d'événements
+ * - Filtrage côté client pour une réactivité instantanée
+ * - Gestion mémoire optimisée avec cleanup des timers
+ *
+ * @group Components
+ */
+
 import {useCallback, useEffect, useRef, useState} from "react";
 import {Epreuve, EpreuveFilters} from "@/type/evenement/epreuve";
 import {Discipline} from "@/type/evenement/discipline";
 import {useDisciplines} from "@/hook/useDisciplines";
 
+/**
+ * Props du composant SearchEpreuveDesktop
+ */
 interface Props {
+  /** Fonction appelée lors des changements de filtres de recherche */
   onFiltersChange: (filters: EpreuveFilters) => void;
+  /** État actuel des filtres de recherche */
   filters: EpreuveFilters;
+  /** Liste des épreuves disponibles pour le filtrage contextuel */
   epreuves: Epreuve[];
 }
 
+/**
+ * Composant SearchEpreuveDesktop pour la recherche et le filtrage des épreuves sur desktop.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * Le composant offre une interface desktop optimisée avec une mise en page horizontale
+ * qui tire parti de l'espace disponible sur les écrans larges. Il intègre une recherche
+ * intelligente avec autocomplete et debounce pour une expérience utilisateur fluide.
+ *
+ * @param props - Les propriétés du composant
+ * @param props.onFiltersChange - Callback pour les changements de filtres
+ * @param props.filters - État actuel des filtres
+ * @param props.epreuves - Liste des épreuves pour le filtrage contextuel
+ *
+ * @returns Interface de recherche desktop horizontale avec filtrage intelligent
+ *
+ * @example
+ * ```tsx
+ * // Utilisation basique dans un layout desktop
+ * <SearchEpreuveDesktop
+ *   onFiltersChange={handleFiltersChange}
+ *   filters={currentFilters}
+ *   epreuves={epreuvesData}
+ * />
+ *
+ * // Avec gestion d'état complète
+ * const [filters, setFilters] = useState<EpreuveFilters>({});
+ * const [epreuves] = useEpreuves();
+ *
+ * <SearchEpreuveDesktop
+ *   onFiltersChange={(newFilters) => {
+ *     setFilters(newFilters);
+ *     applyFiltersToResults(newFilters);
+ *   }}
+ *   filters={filters}
+ *   epreuves={epreuves}
+ * />
+ *
+ * // Interface responsive intégrée
+ * const isMobile = useIsMobile();
+ * if (!isMobile) {
+ *   return <SearchEpreuveDesktop {...searchProps} />;
+ * }
+ * ```
+ */
 export default function SearchEpreuveDesktop({
                                                onFiltersChange,
                                                filters,

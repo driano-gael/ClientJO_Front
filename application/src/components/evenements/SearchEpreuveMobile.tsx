@@ -1,15 +1,109 @@
+/**
+ * @module components/evenements/SearchEpreuveMobile
+ * Module de composant SearchEpreuveMobile pour la recherche et le filtrage des épreuves sur appareils mobiles
+ *
+ * Ce module contient le composant SearchEpreuveMobile qui fournit une interface de recherche
+ * optimisée pour les appareils mobiles avec un design expansible et des fonctionnalités
+ * de filtrage avancées. Il permet la recherche par discipline, épreuve et date.
+ *
+ * ## Fonctionnalités principales
+ * - Interface expansible/rétractable pour économiser l'espace écran
+ * - Recherche en temps réel avec debounce (150ms) pour optimiser les performances
+ * - Autocomplete intelligent pour disciplines et épreuves
+ * - Gestion des clics extérieurs pour fermer les listes déroulantes
+ * - Filtrage par date minimum avec sélecteur de date natif
+ * - Bouton de réinitialisation des filtres
+ *
+ * ## Interface mobile optimisée
+ * - Header cliquable avec icône pour expansion/réduction
+ * - Champs de recherche avec placeholder contextuel
+ * - Listes déroulantes avec scroll pour de nombreux résultats
+ * - Design responsive avec ombre portée et coins arrondis
+ * - Gestion tactile optimisée pour mobile
+ *
+ * ## Recherche intelligente
+ * - **Disciplines** : Recherche textuelle avec filtrage en temps réel
+ * - **Épreuves** : Filtrage contextuel selon la discipline sélectionnée
+ * - **Debounce** : Optimisation des performances avec délai de 150ms
+ * - **Autocomplete** : Suggestions en temps réel avec mise en surbrillance
+ *
+ * ## Gestion d'état avancée
+ * - États locaux synchronisés avec les filtres parents
+ * - Références DOM pour détecter les interactions extérieures
+ * - Callbacks optimisés avec useCallback pour éviter les re-rendus
+ * - Gestion des focus/blur pour une UX fluide
+ *
+ * ## Performance
+ * - Debounce sur les recherches pour limiter les appels
+ * - useCallback pour optimiser les gestionnaires d'événements
+ * - Filtrage côté client pour une réactivité instantanée
+ * - Gestion mémoire optimisée avec cleanup des timers
+ *
+ * @group Components
+ */
+
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import Image from "next/image";
 import { EpreuveFilters, Epreuve } from "@/type/evenement/epreuve";
 import { Discipline } from "@/type/evenement/discipline";
 import { useDisciplines } from "@/hook/useDisciplines";
 
+/**
+ * Props du composant SearchEpreuveMobile
+ */
 interface SearchEpreuveMobileProps {
+  /** Fonction appelée lors des changements de filtres de recherche */
   onFiltersChange: (filters: EpreuveFilters) => void;
+  /** État actuel des filtres de recherche */
   filters: EpreuveFilters;
-  epreuves: Epreuve[]; // ← Nouvelles props
+  /** Liste des épreuves disponibles pour le filtrage contextuel */
+  epreuves: Epreuve[];
 }
 
+/**
+ * Composant SearchEpreuveMobile pour la recherche et le filtrage des épreuves sur mobile.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * Le composant offre une interface mobile optimisée avec un design expansible pour économiser
+ * l'espace écran. Il intègre une recherche intelligente avec autocomplete et debounce pour
+ * une expérience utilisateur fluide et performante.
+ *
+ * @param props - Les propriétés du composant
+ * @param props.onFiltersChange - Callback pour les changements de filtres
+ * @param props.filters - État actuel des filtres
+ * @param props.epreuves - Liste des épreuves pour le filtrage contextuel
+ *
+ * @returns Interface de recherche mobile expansible avec filtrage intelligent
+ *
+ * @example
+ * ```tsx
+ * // Utilisation basique dans un layout mobile
+ * <SearchEpreuveMobile
+ *   onFiltersChange={handleFiltersChange}
+ *   filters={currentFilters}
+ *   epreuves={epreuvesData}
+ * />
+ *
+ * // Avec gestion d'état complète
+ * const [filters, setFilters] = useState<EpreuveFilters>({});
+ * const [epreuves] = useEpreuves();
+ *
+ * <SearchEpreuveMobile
+ *   onFiltersChange={(newFilters) => {
+ *     setFilters(newFilters);
+ *     applyFiltersToResults(newFilters);
+ *   }}
+ *   filters={filters}
+ *   epreuves={epreuves}
+ * />
+ *
+ * // Interface responsive intégrée
+ * const isMobile = useIsMobile();
+ * if (isMobile) {
+ *   return <SearchEpreuveMobile {...searchProps} />;
+ * }
+ * ```
+ */
 export default function SearchEpreuveMobile({ onFiltersChange, filters, epreuves }: SearchEpreuveMobileProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [localFilters, setLocalFilters] = useState<EpreuveFilters>(filters);

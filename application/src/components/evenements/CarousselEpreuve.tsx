@@ -1,14 +1,102 @@
+/**
+ * @module components/evenements/CarousselEpreuve
+ * Module de composant CarousselEpreuve pour l'affichage en carrousel des épreuves olympiques
+ *
+ * Ce module contient le composant CarousselEpreuve qui affiche une liste d'épreuves
+ * sous forme de carrousel interactif avec navigation par boutons et gestes tactiles.
+ * Il s'adapte automatiquement à la taille d'écran pour optimiser l'affichage.
+ *
+ * ## Fonctionnalités principales
+ * - Affichage en carrousel responsive avec calcul dynamique du nombre de cartes
+ * - Navigation par boutons précédent/suivant
+ * - Support des gestes tactiles (swipe) pour appareils mobiles
+ * - Animation fluide entre les slides avec transitions CSS
+ * - Boucle infinie pour navigation continue
+ * - Redimensionnement automatique selon la largeur d'écran
+ *
+ * ## Navigation
+ * - **Boutons** : Flèches gauche/droite avec overlay semi-transparent
+ * - **Tactile** : Swipe gauche/droite avec détection de distance minimale (50px)
+ * - **Boucle** : Retour automatique au début/fin lors des limites
+ * - **Keyboard** : Compatible avec la navigation clavier (focus)
+ *
+ * ## Responsive Design
+ * - Calcul automatique : largeur écran ÷ 250px = nombre de cartes visibles
+ * - Redimensionnement en temps réel sur resize de fenêtre
+ * - Réinitialisation de position lors du changement de taille
+ * - Adaptation mobile/desktop automatique
+ *
+ * ## Interactions
+ * - Clic sur carte : transmission de l'ID d'épreuve au parent
+ * - Swipe tactile : détection de mouvement avec seuil de 50px
+ * - Hover effects sur les boutons de navigation
+ * - Transitions fluides de 500ms entre les slides
+ *
+ * ## Design et UX
+ * - Coins arrondis asymétriques (top-left, bottom-right)
+ * - Boutons de navigation positionnés en dehors du carrousel
+ * - Padding interne pour espacement des cartes
+ * - Overflow masqué pour effet de glissement propre
+ *
+ * @group Components
+ */
+
 "use client";
 
 import {useState, useEffect} from "react";
 import { EpreuveCardType } from "@/type/evenement/epreuve";
 import CardEpreuve from "@/components/evenements/CardEpreuve";
 
+/**
+ * Props du composant CarousselEpreuve
+ */
 interface Props {
+  /** Liste des épreuves à afficher dans le carrousel (optionnel, tableau vide par défaut) */
   epreuves?: EpreuveCardType[];
+  /** Fonction appelée lors du clic sur une carte d'épreuve, recevant l'ID de l'épreuve */
   onCardClickAction: (epreuveId: number) => void;
 }
 
+/**
+ * Composant CarousselEpreuve pour l'affichage en carrousel des épreuves olympiques.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * Le composant crée un carrousel interactif qui s'adapte automatiquement à la taille
+ * d'écran et offre plusieurs modes de navigation. Il calcule dynamiquement le nombre
+ * de cartes visibles et gère les transitions fluides entre les slides.
+ *
+ * @param props - Les propriétés du composant
+ * @param props.epreuves - Liste des épreuves à afficher dans le carrousel
+ * @param props.onCardClickAction - Callback appelé lors du clic sur une carte
+ *
+ * @returns Carrousel interactif avec navigation et gestion tactile
+ *
+ * @example
+ * ```tsx
+ * // Utilisation basique avec liste d'épreuves
+ * <CarousselEpreuve
+ *   epreuves={epreuvesData}
+ *   onCardClickAction={(id) => setSelectedEpreuve(id)}
+ * />
+ *
+ * // Avec gestion d'état et modal
+ * const [selectedEpreuve, setSelectedEpreuve] = useState<number | null>(null);
+ *
+ * <CarousselEpreuve
+ *   epreuves={filteredEpreuves}
+ *   onCardClickAction={(epreuveId) => {
+ *     setSelectedEpreuve(epreuveId);
+ *     setModalOpen(true);
+ *   }}
+ * />
+ *
+ * // Carrousel vide (affichage conditionnel)
+ * <CarousselEpreuve
+ *   epreuves={[]}
+ *   onCardClickAction={handleEpreuveSelection}
+ * />
+ * ```
+ */
 export default function CarousselEpreuve({ epreuves = [], onCardClickAction }: Props) {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(2);

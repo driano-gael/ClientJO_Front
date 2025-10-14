@@ -1,3 +1,52 @@
+/**
+ * @module components/header/HeaderMobile
+ * Module de composant HeaderMobile pour la navigation principale sur appareils mobiles
+ *
+ * Ce module contient le composant HeaderMobile qui fournit la barre de navigation
+ * principale optimisée pour les écrans mobiles. Il intègre un menu burger, le logo
+ * et le profil utilisateur dans une mise en page compacte adaptée aux petits écrans.
+ *
+ * ## Fonctionnalités principales
+ * - Barre de navigation horizontale optimisée pour mobile
+ * - Menu burger avec état d'ouverture/fermeture géré par useState
+ * - Logo Paris 2024 avec dimensions réduites pour mobile
+ * - Intégration du composant Profile pour gestion utilisateur
+ * - Navigation coulissante ou overlay pour économiser l'espace
+ * - Design responsive avec breakpoints md:hidden
+ *
+ * ## Structure de navigation
+ * - **Menu burger** : Section gauche avec bouton toggle
+ * - **Logo + Titre** : Section centrale avec branding Paris 2024
+ * - **Profil** : Section droite avec composant Profile intégré
+ *
+ * ## Interactions mobiles
+ * - Bouton burger avec animation SVG (3 lignes horizontales)
+ * - Toggle d'état pour ouverture/fermeture du menu
+ * - Focus outline pour accessibilité tactile
+ * - Aria-label pour lecteurs d'écran
+ * - Touch-friendly avec tailles de boutons adaptées
+ *
+ * ## Gestion d'état
+ * - useState pour isMenuOpen (boolean)
+ * - Toggle fonction avec setIsMenuOpen
+ * - État réactif pour l'affichage du menu
+ * - Fermeture automatique possible lors de navigation
+ *
+ * ## Design adaptatif
+ * - Padding réduit (px-4 py-2) pour économiser l'espace
+ * - Logo plus petit (50x55px) par rapport au desktop
+ * - Typography responsive avec md:text-xl
+ * - Cache le menu burger sur écrans moyens et plus (md:hidden)
+ *
+ * ## Accessibilité mobile
+ * - Aria-label sur le bouton burger
+ * - Focus states appropriés pour navigation tactile
+ * - Contrast suffisant pour les éléments interactifs
+ * - Taille de touch target optimale (w-8 h-8)
+ *
+ * @group Components
+ */
+
 'use client';
 
 import Link from 'next/link';
@@ -5,6 +54,53 @@ import Image from 'next/image';
 import { useState } from 'react';
 import Profile from './Profile';
 
+/**
+ * Composant HeaderMobile pour la navigation principale sur appareils mobiles.
+ * Voir la documentation du module ci-dessus pour les détails complets.
+ *
+ * Le composant crée une barre de navigation mobile compacte avec menu burger
+ * qui s'adapte automatiquement aux contraintes d'espace des petits écrans.
+ * Il gère l'état d'ouverture/fermeture du menu avec animation et fermeture
+ * automatique lors de la navigation.
+ *
+ * @returns Header de navigation mobile avec menu burger et profil utilisateur
+ *
+ * @example
+ * ```tsx
+ * // Utilisation dans un layout mobile
+ * import HeaderMobile from '@/components/header/HeaderMobile';
+ *
+ * function MobileLayout({ children }) {
+ *   return (
+ *     <>
+ *       <HeaderMobile />
+ *       <main>{children}</main>
+ *     </>
+ *   );
+ * }
+ *
+ * // Dans un composant responsive
+ * const isMobile = useIsMobile();
+ * return (
+ *   <>
+ *     {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
+ *     {children}
+ *   </>
+ * );
+ *
+ * // Avec gestion d'état personnalisée
+ * function App() {
+ *   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+ *
+ *   return (
+ *     <HeaderMobile
+ *       onMenuToggle={setIsMobileMenuOpen}
+ *       isOpen={isMobileMenuOpen}
+ *     />
+ *   );
+ * }
+ * ```
+ */
 export default function HeaderMobile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
