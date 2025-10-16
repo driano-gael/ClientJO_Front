@@ -1,6 +1,6 @@
 # Guide d'Installation et d'Exécution - Application Client JO Front
 
-## 📋 Prérequis Système
+## Prérequis Système
 
 Avant de commencer l'installation, assurez-vous d'avoir les éléments suivants installés sur votre système :
 
@@ -22,7 +22,7 @@ Avant de commencer l'installation, assurez-vous d'avoir les éléments suivants 
 - ✅ **macOS** 10.15+
 - ✅ **Linux** (Ubuntu 18.04+, CentOS 7+)
 
-## 🚀 Installation
+## Installation
 
 ### 1. Cloner le Repository
 
@@ -71,12 +71,11 @@ Ajoutez les variables d'environnement nécessaires :
 
 ```env
 # API Backend
-NEXT_PUBLIC_API_URL=http://localhost:8080
-NEXT_PUBLIC_API_TIMEOUT=10000
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
 
 # Configuration de l'application
-NEXT_PUBLIC_APP_NAME="Billetterie JO"
-NEXT_PUBLIC_APP_VERSION="0.1.0"
+NEXT_PUBLIC_AUTH_TOKEN_KEY=auth_token
+NEXT_PUBLIC_AUTH_REFRESH_TOKEN_KEY=auth_refresh_token
 
 # Mode de développement
 NODE_ENV=development
@@ -84,7 +83,9 @@ NODE_ENV=development
 
 > **Note** : Adaptez les URLs selon votre configuration backend
 
-## ⚡ Exécution du Projet
+## Exécution du Projet
+
+Attention l'API Backend doit etre en fonctionnement
 
 ### Mode Développement
 
@@ -96,11 +97,6 @@ npm run dev
 
 L'application sera accessible à l'adresse : **http://localhost:3000**
 
-#### Fonctionnalités du Mode Développement
-- 🔄 **Hot Reload** : Rechargement automatique des modifications
-- 🐛 **Source Maps** : Debugging facilité
-- ⚠️ **Messages d'erreur détaillés** : Diagnostics complets
-- 🔍 **React DevTools** : Compatible avec les outils React
 
 ### Mode Production
 
@@ -109,7 +105,6 @@ L'application sera accessible à l'adresse : **http://localhost:3000**
 ```bash
 npm run build
 ```
-
 Cette commande :
 - Compile le code TypeScript
 - Optimise les assets (CSS, images, JS)
@@ -196,26 +191,7 @@ Modifiez le script dans `package.json` :
 }
 ```
 
-## 🗂️ Structure du Projet
-
-```
-application/
-├── 📁 src/                    # Code source
-│   ├── 📁 app/               # Pages Next.js (App Router)
-│   ├── 📁 components/        # Composants React
-│   ├── 📁 lib/              # Services et utilitaires
-│   ├── 📁 store/            # Configuration Redux
-│   └── 📁 styles/           # Styles globaux
-├── 📁 public/               # Assets statiques
-├── 📁 docs/                 # Documentation générée
-├── 📄 package.json          # Dépendances et scripts
-├── 📄 next.config.ts        # Configuration Next.js
-├── 📄 tailwind.config.js    # Configuration Tailwind
-├── 📄 tsconfig.json         # Configuration TypeScript
-└── 📄 .env.local           # Variables d'environnement
-```
-
-## 🐛 Résolution de Problèmes
+## Résolution de Problèmes
 
 ### Problèmes Courants
 
@@ -251,139 +227,5 @@ npm run dev
 rm -rf .next
 npm run build
 ```
-
-### Logs de Debug
-
-#### Mode Développement
-Les erreurs sont affichées directement dans :
-- Console du navigateur
-- Terminal de développement
-- Overlay d'erreur Next.js
-
-#### Mode Production
-```bash
-# Activer les logs détaillés
-DEBUG=* npm run start
-```
-
-## 🔍 Vérification de l'Installation
-
-### Checklist Post-Installation
-
-- [ ] Node.js version ≥ 18.0
-- [ ] npm install sans erreurs
-- [ ] `npm run dev` démarre correctement
-- [ ] Application accessible sur http://localhost:3000
-- [ ] `npm run test` passe avec succès
-- [ ] `npm run build` sans erreurs
-- [ ] `npm run lint` sans warnings critiques
-
-### Commandes de Vérification
-
-```bash
-# Vérifier les versions
-node --version
-npm --version
-
-# Vérifier les dépendances
-npm list --depth=0
-
-# Test complet
-npm run check
-```
-
-## 🚀 Déploiement
-
-### Plateformes Recommandées
-
-#### Vercel (Recommandé pour Next.js)
-```bash
-# Installation Vercel CLI
-npm i -g vercel
-
-# Déploiement
-vercel
-```
-
-#### Netlify
-```bash
-# Build pour déploiement statique
-npm run build
-npm run export  # Si configuré
-```
-
-#### Docker
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-## ⚙️ Configuration Avancée
-
-### Variables d'Environnement Complètes
-
-```env
-# API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:8080
-NEXT_PUBLIC_API_TIMEOUT=10000
-
-# Application Settings
-NEXT_PUBLIC_APP_NAME="Billetterie JO"
-NEXT_PUBLIC_APP_VERSION="0.1.0"
-NEXT_PUBLIC_DEBUG_MODE=false
-
-# Redis/Cache (si applicable)
-REDIS_URL=redis://localhost:6379
-
-# Database (si applicable)
-DATABASE_URL=postgresql://user:pass@localhost:5432/db
-
-# Mode et optimisations
-NODE_ENV=development
-NEXT_TELEMETRY_DISABLED=1
-```
-
-### Configuration Next.js Personnalisée
-
-```typescript
-// next.config.ts
-const nextConfig = {
-  images: {
-    unoptimized: true,
-    domains: ['example.com']
-  },
-  experimental: {
-    optimizeCss: true,
-  },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  // Ajoutez vos configurations personnalisées
-}
-```
-
-## 📞 Support et Aide
-
-### En cas de Problème
-
-1. **Vérifiez la documentation** technique générée
-2. **Consultez les logs** d'erreur détaillés
-3. **Recherchez dans les issues** du repository
-4. **Contactez l'équipe** de développement
-
-### Ressources Utiles
-
-- [Documentation Next.js](https://nextjs.org/docs)
-- [Documentation React](https://react.dev/)
-- [Documentation TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentation Tailwind CSS](https://tailwindcss.com/docs)
-
----
 
 *Cette documentation est maintenue à jour avec chaque version. Vérifiez régulièrement les mises à jour.*
