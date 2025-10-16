@@ -7,8 +7,14 @@
  */
 export function formatDateFr(dateString?: string): string {
   if (!dateString) return "Date Inconnue";
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" }).format(date);
+
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Date Inconnue";
+    return new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" }).format(date);
+  } catch {
+    return "Date Inconnue";
+  }
 }
 
 /**
@@ -20,6 +26,19 @@ export function formatDateFr(dateString?: string): string {
  */
 export function formatHeure(heure?: string): string {
   if (!heure) return "Horaire inconnu";
-  const [h, m] = heure.split(":");
-  return `${parseInt(h, 10)}h${m}`;
+
+  try {
+    const parts = heure.split(":");
+    if (parts.length !== 2) return "Horaire inconnu";
+
+    const [h, m] = parts;
+    const hours = parseInt(h, 10);
+    const minutes = parseInt(m, 10);
+
+    if (isNaN(hours) || isNaN(minutes)) return "Horaire inconnu";
+
+    return `${hours}h${m}`;
+  } catch {
+    return "Horaire inconnu";
+  }
 }
